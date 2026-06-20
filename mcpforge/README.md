@@ -56,4 +56,12 @@ scripts/
 - **Phase B:** wrap this engine in the Next.js app (`/api/parse`, `/api/generate` SSE, preview, ZIP download), deploy to Vercel, launch the free generator → first users.
 - **Then:** monetization (auth/Stripe/Pro) *or* done-for-you for first ₹10,000.
 
+## Single source of truth
+`mcpforge/src` is the **canonical** engine. The web app uses a **generated** copy at `web/lib/engine/` (imports stripped of `.ts` extensions for the bundler). After any change to `src/`, run:
+```bash
+npm run sync-engine          # regenerate web/lib/engine
+npm run sync-engine:check    # CI guard: exit 1 if the copy drifted
+```
+Edit `src/` only — `web/lib/engine/` files are marked `// GENERATED — DO NOT EDIT`.
+
 > Production notes vs. this Phase-A engine: real build uses `@apidevtools/swagger-parser` (full deref + OpenAPI 2.0 + YAML), pins the SDK version, and pipes descriptions through Claude by default for Pro. The IR contract stays identical, so nothing downstream changes.

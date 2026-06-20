@@ -1,3 +1,6 @@
+// GENERATED from mcpforge/src/ir/types.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // The Intermediate Representation (IR) — the keystone abstraction (ARCHITECTURE.md §4).
 // All inputs normalize to IR; the generator only knows IR. Adding new inputs later
 // (Postgres/GraphQL) = a new parser -> IR, with zero generator changes.

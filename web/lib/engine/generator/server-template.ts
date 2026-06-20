@@ -1,3 +1,6 @@
+// GENERATED from mcpforge/src/generator/server-template.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // Code generation (BUILD_ORDER item 5) — IR -> a complete, valid `src/index.ts` MCP server.
 // Output: official @modelcontextprotocol/sdk, Zod-validated inputs, auth from env
 // (never hard-coded), structured errors, timeouts. This is the core value.

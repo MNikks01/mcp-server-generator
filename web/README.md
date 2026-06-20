@@ -57,4 +57,6 @@ scripts/smoke-api.mjs · scripts/smoke-phase-c.mjs
 ## Next (per ../BUILD_ORDER.md)
 Deploy to Vercel → **first users**; add Stripe keys → **first self-serve payment**; or run done-for-you for the **first ₹10,000**.
 
-> The engine's source of truth is [`../mcpforge`](../mcpforge); `lib/engine/` is a port (imports stripped of `.ts` extensions for the bundler). Keep them in sync, or extract a shared workspace package later.
+> **`lib/engine/` is GENERATED — do not edit it.** The single source of truth is [`../mcpforge/src`](../mcpforge/src); `lib/engine/` is an auto-generated copy with `.ts` import extensions stripped for the bundler. After changing the engine, run `node ../mcpforge/scripts/sync-engine.mjs` (or `npm run sync-engine` in `mcpforge/`). CI can guard drift with `npm run sync-engine:check`.
+>
+> _Why a generated copy and not a shared import? Node's native-TS CLI requires `.ts` import extensions, which Turbopack rejects, and Turbopack won't resolve files outside the app root — so one source can't directly serve both. The generated copy makes `mcpforge/src` authoritative while keeping drift impossible to miss._

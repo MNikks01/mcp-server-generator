@@ -1,3 +1,6 @@
+// GENERATED from mcpforge/src/generator/project-files.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // Project files (BUILD_ORDER item 7) — turns generated code into a RUNNABLE project:
 // package.json, tsconfig.json, README.md, mcp.json, .env.example, .gitignore.
 

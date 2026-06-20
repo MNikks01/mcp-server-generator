@@ -1,3 +1,6 @@
+// GENERATED from mcpforge/src/generator/build.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // Build orchestrator — IR -> a complete file map (the thing the web layer zips,
 // and the CLI/demo writes to disk). This is the single entry point of the engine.
 

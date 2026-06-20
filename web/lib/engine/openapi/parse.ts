@@ -1,3 +1,6 @@
+// GENERATED from mcpforge/src/openapi/parse.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // OpenAPI 3 -> IR (BUILD_ORDER items 3-4).
 // MVP scope: a focused, dependency-free parser for OpenAPI 3.x JSON with a minimal
 // local ($ref) resolver. Production hardening swaps this for @apidevtools/swagger-parser

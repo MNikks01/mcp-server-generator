@@ -8,7 +8,9 @@
   "scripts": {
     "demo": "node scripts/demo.ts",
     "test": "node scripts/test-specs.ts",
-    "cli": "node src/cli.ts"
+    "cli": "node src/cli.ts",
+    "sync-engine": "node scripts/sync-engine.mjs",
+    "sync-engine:check": "node scripts/sync-engine.mjs --check"
   },
   "engines": { "node": ">=22.18" }
 }

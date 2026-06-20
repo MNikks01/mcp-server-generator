@@ -1,3 +1,6 @@
+// GENERATED from mcpforge/src/generator/descriptions.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // Tool-description generation (BUILD_ORDER item 6) — THE differentiator (MCP.md §4).
 // Descriptions follow the contract: what / when / when-NOT / returns.
 //
