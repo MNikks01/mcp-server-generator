@@ -1,0 +1,25 @@
+{
+  "$comment": "MCP Server Generator config template. 'mcp-generator' exposes the generator itself as an MCP server so an agent can generate servers. The 'example-generated-server' block shows the shape of a server this tool produces (hosted, streamable-http, API-key auth). Replace ${VARS} from your environment/secret manager — never commit real tokens.",
+  "mcpServers": {
+    "mcp-generator": {
+      "url": "https://api.mcpgen.dev/mcp",
+      "transport": "streamable-http",
+      "headers": { "Authorization": "Bearer ${MCPGEN_API_KEY}" },
+      "description": "Generate a production-ready MCP server from an OpenAPI/Postgres/GraphQL/codebase input.",
+      "tools": ["generate_mcp_server", "list_templates", "deploy_server"]
+    },
+    "example-generated-server": {
+      "$comment": "Example of what THIS tool outputs for a hosted server.",
+      "url": "https://servers.mcpgen.dev/acme-api/mcp",
+      "transport": "streamable-http",
+      "headers": { "Authorization": "Bearer ${ACME_SERVER_KEY}" },
+      "description": "Generated server wrapping Acme's REST API with auth, validation, rate limits, and great tool descriptions."
+    },
+    "example-local-stdio": {
+      "$comment": "Example of a generated server you downloaded and run locally.",
+      "command": "node",
+      "args": ["./my-generated-server/dist/index.js"],
+      "env": { "ACME_API_KEY": "${ACME_API_KEY}" }
+    }
+  }
+}

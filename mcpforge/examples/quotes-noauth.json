@@ -1,0 +1,25 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Quotes API", "version": "1.0.0" },
+  "servers": [{ "url": "https://api.quotable.io" }],
+  "paths": {
+    "/random": {
+      "get": {
+        "operationId": "randomQuote",
+        "summary": "Get a random quote",
+        "parameters": [
+          { "name": "tags", "in": "query", "required": false, "schema": { "type": "string" } }
+        ]
+      }
+    },
+    "/quotes/{id}": {
+      "get": {
+        "operationId": "getQuote",
+        "summary": "Get a quote by id",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ]
+      }
+    }
+  }
+}

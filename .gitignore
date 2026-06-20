@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+.vercel/
+next-env.d.ts
+
+# builds
+dist/
+*.tsbuildinfo
+
+# generated demo output (regenerable via `node mcpforge/scripts/demo.ts`)
+mcpforge/generated/
+
+# env — keep .env.example, ignore real env files
+.env
+.env.local
+.env*.local
+.env.development
+.env.production
+
+# logs / os / editor
+*.log
+npm-debug.log*
+.DS_Store
+.idea/
+.vscode/

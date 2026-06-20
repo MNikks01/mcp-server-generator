@@ -1,0 +1,14 @@
+{
+  "name": "mcpforge-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCPForge generation engine + CLI (Phase A) — OpenAPI spec -> production-ready MCP server. Runs on Node 24 native TypeScript; zero runtime dependencies.",
+  "bin": { "mcpforge": "src/cli.ts" },
+  "scripts": {
+    "demo": "node scripts/demo.ts",
+    "test": "node scripts/test-specs.ts",
+    "cli": "node src/cli.ts"
+  },
+  "engines": { "node": ">=22.18" }
+}

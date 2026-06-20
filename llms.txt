@@ -1,0 +1,38 @@
+# MCP Server Generator
+
+> Generate production-ready MCP servers from any OpenAPI spec, Postgres/MySQL schema, GraphQL schema, or codebase — with auth, validation, rate limits, great LLM-friendly tool descriptions, observability, and one-click hosting. Open-core CLI + web. Project #3 (the wedge — build first) of the AI Startup Lab; the integration-builder layer of ContextOS (#1). Spec-first; no app code yet.
+
+## Core
+- [README](./README.md): What/why/how + capability ladder
+- [VISION](./VISION.md): Default way MCP servers get built + hosted
+- [PROBLEM](./PROBLEM.md): Building good MCP servers is manual/insecure
+- [CUSTOMERS](./CUSTOMERS.md): AI-building devs, agencies, SaaS owners, platform teams
+- [FEATURES](./FEATURES.md): MVP→V3
+- [USER_STORIES](./USER_STORIES.md): 100+ stories
+
+## Engineering
+- [ARCHITECTURE](./ARCHITECTURE.md): Parsers → IR → describe → generate → host (Mermaid)
+- [TECH_STACK](./TECH_STACK.md): swagger-parser, ts-morph, MCP SDK, container hosting
+- [DATABASE](./DATABASE.md): sources/generations/servers/hosted_servers/tool_calls
+- [API_DESIGN](./API_DESIGN.md): REST + CLI (mcpgen)
+- [AI_ARCHITECTURE](./AI_ARCHITECTURE.md): tool-description generation (the moat) + evals
+- [MCP](./MCP.md): DEEPEST MCP spec — output contract, mapping rules, security
+- [RAG](./RAG.md): intentionally minimal (codegen tool, not RAG)
+- [AGENT_DESIGN](./AGENT_DESIGN.md): pipeline is a workflow; narrow agent surfaces
+
+## Production
+- [SECURITY](./SECURITY.md) (secure-by-default generated servers + sandbox), [OBSERVABILITY](./OBSERVABILITY.md), [GUARDRAILS](./GUARDRAILS.md), [DEVOPS](./DEVOPS.md)
+
+## Execution
+- [TASKS](./TASKS.md), [SPRINTS](./SPRINTS.md) (MVP ≈6 weeks — first launch)
+
+## Business
+- [PRICING](./PRICING.md) (free gen, paid hosting), [GTM](./GTM.md) (OSS + demo), [SALES](./SALES.md), [RISKS](./RISKS.md), [HIRING](./HIRING.md), [OPEN_SOURCE](./OPEN_SOURCE.md), [RESUME_VALUE](./RESUME_VALUE.md)
+
+## For agents
+- [CLAUDE.md](./CLAUDE.md), [AGENTS.md](./AGENTS.md), [mcp.json](./mcp.json)
+
+## Key decisions (../DECISION_LOG.md)
+- D-002 build FIRST (wedge) · D-003 Claude+abstraction · D-007 open-core (generator core OSS)
+## Differentiator
+Production-ready + secure-by-default servers with excellent, functionally-evaluated tool descriptions.
