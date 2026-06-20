@@ -6,6 +6,18 @@
 
 ---
 
+## About this repository
+
+This is **MCPForge — the MCP Server Generator**, extracted from a larger "AI Startup Lab" that planned a family of AI developer-tooling products. Doc references to sibling pieces (e.g., `DECISION_LOG`, `ContextOS`, `Codebase Intelligence`, the various `*_GUIDE` files) point to that broader context and are **not** part of this standalone repo — everything you need to build and run **this** product is here.
+
+**Code lives in two folders** (docs are at the repo root):
+- [`mcpforge/`](./mcpforge) — the generation engine + CLI (zero-dependency TypeScript; `node mcpforge/scripts/demo.ts`).
+- [`web/`](./web) — the Next.js app: free generator + plan gating + Stripe wiring (`cd web && npm install && npm run dev`).
+
+Licensed under **Apache-2.0** — see [LICENSE](./LICENSE).
+
+---
+
 ## ⭐ Start here
 
 1. **[MVP.md](./MVP.md)** — the 30-day, solo-dev, get-paid build plan (features, tech stack, schema, API, folder structure, user flows, weekly roadmap, **daily tasks Day 1–30**). **Read this first.**
@@ -22,7 +34,7 @@ A developer with an API wants an AI agent (Claude, Cursor) to use it via MCP. Do
 
 ## Why this is the project to build first
 
-Phase 2.1 of ContextOS confirmed the wedge order: **#3 (this) → #2 (Codebase Intelligence) → #1 (ContextOS).** This is the **cheapest to ship, fastest to value, most shareable** product in the lab, it **teaches the MCP layer** the whole lab depends on, and every generated server is a **lead** for #2 and #1. It's also a strong **portfolio/brand asset** for a MERN→AI founder. See [../START_HERE.md](../START_HERE.md), [../DECISION_LOG.md](../DECISION_LOG.md) D-002, and [../contextos/PHASE_2_1_REPORT.md](../contextos/PHASE_2_1_REPORT.md).
+Phase 2.1 of ContextOS confirmed the wedge order: **#3 (this) → #2 (Codebase Intelligence) → #1 (ContextOS).** This is the **cheapest to ship, fastest to value, most shareable** product in the lab, it **teaches the MCP layer** the whole lab depends on, and every generated server is a **lead** for #2 and #1. It's also a strong **portfolio/brand asset** for a MERN→AI founder. See START_HERE.md, DECISION_LOG.md D-002, and contextos/PHASE_2_1_REPORT.md.
 
 ## MVP scope (ruthlessly small)
 

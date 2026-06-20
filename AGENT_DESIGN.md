@@ -1,6 +1,6 @@
 # MCP Server Generator — AGENT DESIGN
 
-**Honest scope:** this product is largely a **deterministic generation pipeline**, not an agentic system — which is correct (workflows > agents for reliability, [../AGENT_GUIDE.md](../AGENT_GUIDE.md)). Agents appear narrowly. This doc covers both the (mostly non-agentic) generation flow and the optional agent surfaces.
+**Honest scope:** this product is largely a **deterministic generation pipeline**, not an agentic system — which is correct (workflows > agents for reliability, AGENT_GUIDE.md). Agents appear narrowly. This doc covers both the (mostly non-agentic) generation flow and the optional agent surfaces.
 
 ## The generation pipeline is a workflow (by design)
 Parse → IR → LLM-describe → template → output. Deterministic, debuggable, fast. No agent loop needed; the only LLM step (description generation) is a single structured call, not an autonomous agent. This is the right architecture — reliability matters and the path is known.

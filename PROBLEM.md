@@ -69,6 +69,6 @@ A developer pastes an OpenAPI spec, picks endpoints, and in under 3 minutes down
 If, after launch + outreach + a done-for-you offer, **strangers won't generate servers that work for them, and nobody will pay even for done-for-you**, the problem isn't painful/urgent enough yet — pivot the input (maybe DB→MCP is sharper) or shelve until MCP adoption deepens. The 30-day MVP is explicitly designed to learn this cheaply.
 
 ## 9. Related Documents
-[MVP.md](./MVP.md) · [MARKET_OPPORTUNITY.md](./MARKET_OPPORTUNITY.md) · [MONETIZATION.md](./MONETIZATION.md) · [CUSTOMERS.md](./CUSTOMERS.md) · [../MCP_GUIDE.md](../MCP_GUIDE.md)
+[MVP.md](./MVP.md) · [MARKET_OPPORTUNITY.md](./MARKET_OPPORTUNITY.md) · [MONETIZATION.md](./MONETIZATION.md) · [CUSTOMERS.md](./CUSTOMERS.md) · MCP_GUIDE.md
 
 *Last reviewed 2026-06-20.*

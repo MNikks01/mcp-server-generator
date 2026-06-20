@@ -1,6 +1,6 @@
 # MCP Server Generator — RAG
 
-**Honest scope:** this product is NOT RAG-centric. It's a code-generation tool; there is no large runtime knowledge base to retrieve over. This doc records the *narrow, optional* places retrieval helps, so the requirement is met without inventing a fake RAG system. General method: [../RAG_GUIDE.md](../RAG_GUIDE.md).
+**Honest scope:** this product is NOT RAG-centric. It's a code-generation tool; there is no large runtime knowledge base to retrieve over. This doc records the *narrow, optional* places retrieval helps, so the requirement is met without inventing a fake RAG system. General method: RAG_GUIDE.md.
 
 ## Where (light) retrieval helps
 | Use | Technique | Stage |
@@ -20,4 +20,4 @@
 - No heavy chunking/re-ranking pipeline — unnecessary for this product's value.
 
 ## Cross-reference
-The serious RAG work lives in [../codebase-intelligence/RAG.md](../codebase-intelligence/RAG.md) and is *reused* here for the V2 codebase-input feature. Keeping RAG out of the MVP is a deliberate scoping decision that keeps this the fast wedge.
+The serious RAG work lives in codebase-intelligence/RAG.md and is *reused* here for the V2 codebase-input feature. Keeping RAG out of the MVP is a deliberate scoping decision that keeps this the fast wedge.

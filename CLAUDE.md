@@ -6,7 +6,7 @@ Guidance for Claude Code and other AI agents. Spec-first (D-011). **This is the 
 A tool that generates production-ready MCP servers from OpenAPI/Postgres/GraphQL/codebase inputs, with great tool descriptions, security, observability, and hosting. Project #3 of the AI Startup Lab; the integration-builder layer of ContextOS (#1).
 
 ## Golden rules
-1. **Respect [../DECISION_LOG.md](../DECISION_LOG.md):** no model training (D-001); Claude default + abstraction (D-003); Postgres (D-004); TS/NestJS (D-005); monorepo (D-006); open-core (D-007).
+1. **Respect DECISION_LOG.md:** no model training (D-001); Claude default + abstraction (D-003); Postgres (D-004); TS/NestJS (D-005); monorepo (D-006); open-core (D-007).
 2. **Generated servers must be production-ready, not toys** — auth, Zod validation, rate limits, timeouts, structured errors, observability, secrets-never-embedded. This is the product.
 3. **Tool descriptions are the moat** — generate what/when/when-not/returns + params + example; validate with functional evals (does an LLM call it correctly?).
 4. **Generation runs sandboxed** — untrusted specs/code never execute against us.

@@ -1,6 +1,6 @@
 # MCP Server Generator — HIRING
 
-This is the wedge — built mostly solo, fast. Minimal hiring; it funds/feeds the next products. Portfolio principles: [../BUSINESS_STRATEGY.md §5](../BUSINESS_STRATEGY.md).
+This is the wedge — built mostly solo, fast. Minimal hiring; it funds/feeds the next products. Portfolio principles: BUSINESS_STRATEGY.md §5.
 
 ## Stage 0 — Solo founder ($0)
 Build the whole MVP solo in ~6 weeks with AI coding agents against this spec (D-011). This product teaches you MCP deeply — that knowledge powers #1 and #2, so the founder *should* build it personally.

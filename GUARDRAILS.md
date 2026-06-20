@@ -1,6 +1,6 @@
 # MCP Server Generator — GUARDRAILS
 
-Two scopes: guardrails on **our generation process** + guardrails we **bake into generated servers**. Shared framework: [../contextos/GUARDRAILS.md](../contextos/GUARDRAILS.md).
+Two scopes: guardrails on **our generation process** + guardrails we **bake into generated servers**. Shared framework: contextos/GUARDRAILS.md.
 
 ## A. Guardrails on our generation process
 1. **Generation sandbox** — parsing untrusted specs/codebases + tool testing runs isolated (no ambient FS/network/secrets). A malicious spec can't compromise us.

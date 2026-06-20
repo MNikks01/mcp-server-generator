@@ -1,6 +1,6 @@
 # MCP Server Generator — MARKET OPPORTUNITY & COMPETITORS
 
-> Market opportunity and the competitive landscape, sized honestly for a solo founder. The point is not a fundable TAM slide — it's deciding whether there is *enough* reachable demand to justify 30 days and a small business. Pairs with [PROBLEM.md](./PROBLEM.md), [../MARKET_RESEARCH.md](../MARKET_RESEARCH.md), [../COMPETITOR_ANALYSIS.md](../COMPETITOR_ANALYSIS.md).
+> Market opportunity and the competitive landscape, sized honestly for a solo founder. The point is not a fundable TAM slide — it's deciding whether there is *enough* reachable demand to justify 30 days and a small business. Pairs with [PROBLEM.md](./PROBLEM.md), MARKET_RESEARCH.md, COMPETITOR_ANALYSIS.md.
 
 ## 1. Executive Summary
 
@@ -19,7 +19,7 @@ If MCP is the connectivity standard for the agent era (the bet), the best build-
 ---
 
 ## 3. Market sizing (directional, solo-founder lens)
-> Fermi estimates; the goal is *reachability*, not a fundraising TAM. See [../MARKET_RESEARCH.md](../MARKET_RESEARCH.md) for portfolio sizing.
+> Fermi estimates; the goal is *reachability*, not a fundraising TAM. See MARKET_RESEARCH.md for portfolio sizing.
 
 - **TAM (long-run):** every developer/team exposing APIs/DBs/tools to AI via MCP — fast-growing, plausibly **$300M–$1B+** as agents mainstream.
 - **SAM (reachable now):** developers *actively building with MCP today* — tens to low-hundreds of thousands, growing fast → a modest but real **$50–150M** envelope.
@@ -58,6 +58,6 @@ If MCP is the connectivity standard for the agent era (the bet), the best build-
 **Build it — as a 30-day wedge, portfolio piece, audience-builder, and funnel — with eyes open that the standalone ceiling is modest and the durable value is hosting + platform + brand.** The timing (early on a steep curve, no quality leader) is the opportunity; the done-for-you + free-funnel motion converts the small-but-high-intent niche into first revenue. Full GTM in [GTM.md](./GTM.md), first customers in [FIRST_CUSTOMERS.md](./FIRST_CUSTOMERS.md).
 
 ## 8. Related Documents
-[PROBLEM.md](./PROBLEM.md) · [MVP.md](./MVP.md) · [MONETIZATION.md](./MONETIZATION.md) · [GTM.md](./GTM.md) · [../COMPETITOR_ANALYSIS.md](../COMPETITOR_ANALYSIS.md) · [../MARKET_RESEARCH.md](../MARKET_RESEARCH.md)
+[PROBLEM.md](./PROBLEM.md) · [MVP.md](./MVP.md) · [MONETIZATION.md](./MONETIZATION.md) · [GTM.md](./GTM.md) · COMPETITOR_ANALYSIS.md · MARKET_RESEARCH.md
 
 *Last reviewed 2026-06-20. Figures are directional estimates.*

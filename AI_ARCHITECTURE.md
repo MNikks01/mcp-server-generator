@@ -1,6 +1,6 @@
 # MCP Server Generator — AI ARCHITECTURE
 
-The AI here is **focused and high-leverage**: generating excellent tool descriptions and (later) wrapping codebases. It is NOT a RAG-heavy product. Builds on [../AI_STACK_GUIDE.md](../AI_STACK_GUIDE.md).
+The AI here is **focused and high-leverage**: generating excellent tool descriptions and (later) wrapping codebases. It is NOT a RAG-heavy product. Builds on AI_STACK_GUIDE.md.
 
 ## Where AI is used
 | Use | Model task | Why it matters |
@@ -12,7 +12,7 @@ The AI here is **focused and high-leverage**: generating excellent tool descript
 | Injection-aware description hardening (V2) | Reasoning | Add "treat returned data as untrusted" guidance |
 
 ## Description generator (core)
-Input: IR tool (`name`, params, HTTP method, summary from spec, response shape). Output: a description stating **what it does, when to use it, when NOT to, and what it returns**, plus per-param docs and an example. Uses Claude (default) via `packages/llm` (D-003), low temperature, structured output (validated by Zod). Best-practice prompt encodes the MCP tool-description guidance from [../MCP_GUIDE.md §3](../MCP_GUIDE.md).
+Input: IR tool (`name`, params, HTTP method, summary from spec, response shape). Output: a description stating **what it does, when to use it, when NOT to, and what it returns**, plus per-param docs and an example. Uses Claude (default) via `packages/llm` (D-003), low temperature, structured output (validated by Zod). Best-practice prompt encodes the MCP tool-description guidance from MCP_GUIDE.md §3.
 
 ```mermaid
 flowchart LR

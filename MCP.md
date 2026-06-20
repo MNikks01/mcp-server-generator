@@ -1,6 +1,6 @@
 # MCP Server Generator — MCP ARCHITECTURE (the output contract)
 
-> MCP is the entire product. This document specifies **what we generate** and **how the generated servers conform to MCP** — the contract that makes the output "production-ready, not a toy." Protocol fundamentals: [../MCP_GUIDE.md](../MCP_GUIDE.md). Build plan: [MVP.md](./MVP.md).
+> MCP is the entire product. This document specifies **what we generate** and **how the generated servers conform to MCP** — the contract that makes the output "production-ready, not a toy." Protocol fundamentals: MCP_GUIDE.md. Build plan: [MVP.md](./MVP.md).
 
 ## 1. Executive Summary
 
@@ -39,7 +39,7 @@ For every tool, the LLM generates a description following a fixed structure, e.g
 
 > `search_orders` — *"Search a customer's orders by status and date range. Use when the user asks about order history or status. Do NOT use to create or modify orders (use create_order). Returns up to 50 orders with id, status, total, and date."*
 
-Plus per-parameter docs. The generation prompt encodes the MCP best-practice from [../MCP_GUIDE.md §3](../MCP_GUIDE.md): **what / when / when-not / returns + examples.** Output is shape-validated; on LLM failure we fall back to spec-derived text (never block generation). Pro tier uses a stronger model for higher-quality descriptions.
+Plus per-parameter docs. The generation prompt encodes the MCP best-practice from MCP_GUIDE.md §3: **what / when / when-not / returns + examples.** Output is shape-validated; on LLM failure we fall back to spec-derived text (never block generation). Pro tier uses a stronger model for higher-quality descriptions.
 
 ## 5. Generated `src/index.ts` (shape)
 
@@ -92,6 +92,6 @@ Generated code: typed, validated, auth-from-env, timeouts, structured errors. No
 Auth scaffolded from the spec, inputs validated, errors structured, secrets externalized, the official SDK pinned, and — crucially — **descriptions good enough that the model uses the tools correctly**. A generic converter skips most of this; that gap is the product.
 
 ## 10. Related Documents
-[MVP.md](./MVP.md) · [ARCHITECTURE.md](./ARCHITECTURE.md) · [SECURITY.md](./SECURITY.md) · [../MCP_GUIDE.md](../MCP_GUIDE.md)
+[MVP.md](./MVP.md) · [ARCHITECTURE.md](./ARCHITECTURE.md) · [SECURITY.md](./SECURITY.md) · MCP_GUIDE.md
 
 *Last reviewed 2026-06-20.*

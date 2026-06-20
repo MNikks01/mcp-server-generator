@@ -1,6 +1,6 @@
 # MCP Server Generator — OBSERVABILITY
 
-Two scopes: **our platform** + **hosted generated servers** (observability of customers' servers is a paid feature). Shared pillars with [../contextos/OBSERVABILITY.md](../contextos/OBSERVABILITY.md).
+Two scopes: **our platform** + **hosted generated servers** (observability of customers' servers is a paid feature). Shared pillars with contextos/OBSERVABILITY.md.
 
 ## Platform metrics
 - Generation: count, success rate, time-to-generate, by input type; description-gen LLM latency/cost.

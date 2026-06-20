@@ -1,6 +1,6 @@
 # MCP Server Generator — DEVOPS
 
-Shared approach with [../contextos/DEVOPS.md](../contextos/DEVOPS.md). Project-specific: the **hosted-server runtime** is the operational heart.
+Shared approach with contextos/DEVOPS.md. Project-specific: the **hosted-server runtime** is the operational heart.
 
 ## Environments
 Local (Docker Compose: Postgres, Redis, app, generation workers, otel) · Preview (per-PR) · Staging · Production. A **sandbox cluster** for generation/tool-testing isolation.
