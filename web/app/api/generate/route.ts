@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import type { IR } from "@/lib/engine/ir/types";
 import { build } from "@/lib/engine/generator/build";
 import { ClaudeDescriptions } from "@/lib/engine/generator/descriptions";
@@ -27,7 +28,8 @@ export async function POST(req: Request) {
 
   // Resolve plan (anonymous = free) and enforce the free endpoint cap.
   const userId = await getUserId();
-  const plan: Plan = userId ? (await getStore().getUser(userId)).plan : "free";
+  const store = getStore();
+  const plan: Plan = userId ? (await store.getUser(userId)).plan : "free";
   const count = body.selectedTools?.length ?? body.ir.tools.length;
   const limit = checkEndpointLimit(plan, count);
   if (!limit.ok) {
@@ -42,7 +44,24 @@ export async function POST(req: Request) {
 
   const ir = selectTools(body.ir, body.selectedTools);
   const result = await build(ir, { descriptionGenerator });
+
+  // Persist to history for signed-in users (so Pro can list/re-download).
+  let generationId: string | undefined;
+  if (userId) {
+    generationId = randomUUID();
+    await store.saveGeneration({
+      id: generationId,
+      userId,
+      name: result.name,
+      ir,
+      descriptions: result.descriptions,
+      endpointCount: result.toolCount,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
   return NextResponse.json({
+    generationId,
     name: result.name,
     files: result.files,
     descriptions: result.descriptions,

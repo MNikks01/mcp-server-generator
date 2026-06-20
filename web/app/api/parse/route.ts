@@ -1,10 +1,26 @@
 import { NextResponse } from "next/server";
+import { parse as parseYaml } from "yaml";
 import { parseOpenApi, ParseError } from "@/lib/engine/openapi/parse";
 import { assertSafeSpecUrl } from "@/lib/ssrf";
 
 export const runtime = "nodejs";
 
 const MAX_SPEC_BYTES = 2_000_000; // 2MB cap
+
+// Accept JSON or YAML. The engine takes a JSON string or a pre-parsed object,
+// so we parse YAML here (web has the `yaml` dep) and hand the engine an object —
+// keeping the engine itself zero-dependency.
+function toSpecObject(raw: string): unknown {
+  const trimmed = raw.trimStart();
+  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+    return JSON.parse(raw);
+  }
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return parseYaml(raw); // YAML (also parses JSON)
+  }
+}
 
 export async function POST(req: Request) {
   let body: { specUrl?: string; spec?: string };
@@ -36,10 +52,11 @@ export async function POST(req: Request) {
   }
 
   try {
-    const ir = parseOpenApi(raw);
+    const obj = toSpecObject(raw);
+    const ir = parseOpenApi(obj as never);
     return NextResponse.json({ ir });
   } catch (e) {
-    const msg = e instanceof ParseError ? e.message : "Could not parse the spec.";
+    const msg = e instanceof ParseError ? e.message : "Could not parse the spec (expected OpenAPI 3 JSON or YAML).";
     return NextResponse.json({ error: { code: "invalid_spec", message: msg } }, { status: 400 });
   }
 }

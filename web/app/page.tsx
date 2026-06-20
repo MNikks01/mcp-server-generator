@@ -6,7 +6,13 @@ import type { IR } from "@/lib/engine/ir/types";
 
 const DEMO_URL = "https://petstore3.swagger.io/api/v3/openapi.json";
 
-type GenResult = { name: string; descriptions: Record<string, string>; toolCount: number };
+type GenResult = {
+  generationId?: string;
+  name: string;
+  files: Record<string, string>;
+  descriptions: Record<string, string>;
+  toolCount: number;
+};
 
 export default function Home() {
   const [url, setUrl] = useState(DEMO_URL);
@@ -14,16 +20,20 @@ export default function Home() {
   const [ir, setIr] = useState<IR | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [result, setResult] = useState<GenResult | null>(null);
-  const [busy, setBusy] = useState<"" | "parse" | "generate" | "download">("");
+  const [busy, setBusy] = useState<"" | "parse" | "generate" | "download" | "github">("");
   const [error, setError] = useState("");
   const [plan, setPlan] = useState("free");
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [showFiles, setShowFiles] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     fetch("/api/me")
       .then((r) => r.json())
       .then((d) => setPlan(d.plan ?? "free"))
       .catch(() => {});
+    const spec = new URLSearchParams(window.location.search).get("spec");
+    if (spec) setUrl(spec);
   }, []);
 
   async function parse() {
@@ -48,6 +58,12 @@ export default function Home() {
     }
   }
 
+  function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    file.text().then(setPaste);
+  }
+
   function toggle(name: string) {
     const next = new Set(selected);
     if (next.has(name)) next.delete(name);
@@ -59,6 +75,7 @@ export default function Home() {
     if (!ir) return;
     setError("");
     setShowUpgrade(false);
+    setShowFiles(false);
     setBusy("generate");
     try {
       const res = await fetch("/api/generate", {
@@ -72,7 +89,7 @@ export default function Home() {
         throw new Error(data.error?.message ?? "Upgrade required");
       }
       if (!res.ok) throw new Error(data.error?.message ?? "Generation failed");
-      setResult({ name: data.name, descriptions: data.descriptions, toolCount: data.toolCount });
+      setResult(data);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -100,17 +117,56 @@ export default function Home() {
     }
   }
 
+  function copyMcpJson() {
+    if (!result) return;
+    navigator.clipboard.writeText(result.files["mcp.json"] ?? "");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
+
+  async function pushToGithub() {
+    if (!result?.generationId) return;
+    const repoName = window.prompt("New GitHub repo name:", result.name);
+    if (!repoName) return;
+    const token = window.prompt("GitHub token (repo scope) — used once, never stored:");
+    if (!token) return;
+    setError("");
+    setBusy("github");
+    try {
+      const res = await fetch("/api/github/push", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ generationId: result.generationId, repoName, token }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message ?? "Push failed");
+      window.open(data.repoUrl, "_blank");
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy("");
+    }
+  }
+
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">MCPForge</h1>
         <span className="text-sm text-zinc-500">
-          Plan: <span className="font-medium">{plan}</span> · <Link href="/pricing" className="underline">Pricing</Link>
+          <Link href="/examples" className="underline">Examples</Link>
+          {plan === "pro" && (
+            <>
+              {" · "}
+              <Link href="/history" className="underline">History</Link>
+            </>
+          )}
+          {" · "}Plan: <span className="font-medium">{plan}</span> ·{" "}
+          <Link href="/pricing" className="underline">Pricing</Link>
         </span>
       </div>
       <p className="mt-2 text-zinc-500">
-        Turn any API into a production-ready MCP server in minutes. Paste an OpenAPI spec and get a runnable,
-        well-described MCP server — auth, validation, and good tool descriptions included.
+        Turn any API into a production-ready MCP server in minutes. Give it an OpenAPI spec (JSON or YAML) and get a
+        runnable, well-described MCP server — auth, validation, and good tool descriptions included.
       </p>
 
       <section className="mt-8 space-y-3">
@@ -122,14 +178,15 @@ export default function Home() {
           placeholder="https://.../openapi.json"
         />
         <details className="text-sm text-zinc-500">
-          <summary className="cursor-pointer">…or paste the spec JSON</summary>
+          <summary className="cursor-pointer">…or paste / upload the spec (JSON or YAML)</summary>
           <textarea
             value={paste}
             onChange={(e) => setPaste(e.target.value)}
             rows={6}
             className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-900"
-            placeholder='{ "openapi": "3.0.0", ... }'
+            placeholder='{ "openapi": "3.0.0", ... }  or  openapi: 3.0.0 ...'
           />
+          <input type="file" accept=".json,.yaml,.yml,.txt" onChange={onFile} className="mt-2 text-xs" />
         </details>
         <button
           onClick={parse}
@@ -194,13 +251,44 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <button
-            onClick={download}
-            disabled={busy === "download"}
-            className="mt-4 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
-          >
-            {busy === "download" ? "Zipping…" : "Download ZIP"}
-          </button>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              onClick={download}
+              disabled={busy === "download"}
+              className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+            >
+              {busy === "download" ? "Zipping…" : "Download ZIP"}
+            </button>
+            <button onClick={copyMcpJson} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
+              {copied ? "Copied!" : "Copy mcp.json"}
+            </button>
+            <button onClick={() => setShowFiles((s) => !s)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
+              {showFiles ? "Hide files" : "View files"}
+            </button>
+            {plan === "pro" && (
+              <button
+                onClick={pushToGithub}
+                disabled={busy === "github"}
+                className="rounded-md border border-zinc-300 px-4 py-2 text-sm disabled:opacity-50 dark:border-zinc-700"
+              >
+                {busy === "github" ? "Pushing…" : "Push to GitHub"}
+              </button>
+            )}
+          </div>
+
+          {showFiles && (
+            <div className="mt-4 space-y-3">
+              {Object.entries(result.files).map(([path, content]) => (
+                <div key={path}>
+                  <div className="text-xs font-medium text-zinc-500">{path}</div>
+                  <pre className="mt-1 max-h-72 overflow-auto rounded-md border border-zinc-200 bg-zinc-50 p-3 text-xs dark:border-zinc-800 dark:bg-zinc-900">
+                    {content}
+                  </pre>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
       )}
     </main>

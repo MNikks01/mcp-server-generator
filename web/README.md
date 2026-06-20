@@ -16,7 +16,14 @@ The OpenAPI → MCP server generator. Next.js 16 (App Router) + Tailwind, wrappi
 - ✅ **Stripe** checkout + webhook (`/api/stripe/checkout`, `/api/webhooks/stripe`) — real + drop-in; returns 501 gracefully until keys are set.
 - ✅ In-memory plan store (dev) with the Postgres/Drizzle schema ready (`lib/db/schema.ts`) for production.
 - ✅ Full mechanic proven via `scripts/smoke-phase-c.mjs` (free→402, upgrade→pro, pro→unlimited).
-- 🔲 Visual UI renders + wired — **verify locally** (`npm run dev`); Clerk/Stripe/Postgres need real keys (see `.env.example`).
+
+**Feature completeness (this pass):**
+- ✅ **YAML specs** (in addition to JSON) — `/api/parse` converts YAML→object (engine stays zero-dep).
+- ✅ **Saved history (Pro)** — generations persist; `/api/generations` (Pro-gated) + `/history` page + re-download.
+- ✅ **GitHub push (Pro)** — `/api/github/push` (token per-request, never stored; guards verified; real push needs a token).
+- ✅ **UI**: file upload, "View files", "Copy mcp.json", `/examples` gallery (`?spec=` prefill), SEO metadata.
+- ✅ Verified via `scripts/smoke-features.mjs` + `scripts/test-plan.ts`.
+- 🔲 Visual UI renders + wired — **verify locally** (`npm run dev`); Clerk/Stripe/Postgres/GitHub-OAuth need real keys (see `.env.example`).
 
 ## Run it
 ```bash
