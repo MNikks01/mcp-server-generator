@@ -54,13 +54,14 @@
 - [~] Mobile/tablet/desktop via Tailwind breakpoints (some grids responsive)
 - [ ] Verified across devices / slow-3G / offline — _(not tested; UI not click-tested headlessly)_
 
-### 13. Error Handling — 🟡
-- [x] Graceful + friendly error messages
-- [ ] Error boundaries / fallback UI; [ ] retry buttons — _(mostly missing)_
+### 13. Error Handling — ✅
+- [x] Graceful + friendly error messages (alert region)
+- [x] Error boundaries + fallback UI (`app/error.tsx` + `app/global-error.tsx`) with a retry (reset) button
 
-### 14. Testing — 🟡
-- [x] Integration of user flows via **web HTTP smoke** (`scripts/smoke-api.mjs`)
-- [ ] Component/hook unit tests; [ ] E2E (Playwright) — _(not added; API-level covered)_
+### 14. Testing — 🟡→✅
+- [x] **Component tests** (Vitest + Testing Library + jsdom) — `web/test/page.test.tsx`, run in CI
+- [x] Integration of user flows via **web HTTP smoke** (`scripts/smoke-api.mjs`, incl. `/api/health`)
+- [ ] E2E (Playwright) + deep a11y audit — _(next; ContextOS has the reference a11y pass)_
 
 ### 15. Monitoring & Analytics — 🔴
 - [ ] Error/crash/perf monitoring; [ ] analytics/funnels — _(none; planned: Sentry/analytics)_

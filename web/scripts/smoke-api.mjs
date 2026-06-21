@@ -1,6 +1,9 @@
 // End-to-end web API proof: drives the running Next server through the full flow
 // (parse -> generate -> download) + checks the SSRF guard. No browser needed.
 const BASE = process.env.BASE || "http://localhost:3939";
+const __h = await fetch(BASE + "/api/health").then((r) => r.json()).catch(() => ({}));
+if (__h.status !== "ok") throw new Error("health check failed");
+console.log("\u2713 /api/health -> ok");
 const post = (path, body) =>
   fetch(BASE + path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
 

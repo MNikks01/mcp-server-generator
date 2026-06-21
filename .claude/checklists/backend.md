@@ -66,9 +66,9 @@
 - [x] Payloads minimal; async (no blocking ops); Next compression by default
 - [ ] Pagination / caching / cache invalidation — _(planned; prompt-caching noted in spec)_
 
-### 12. Monitoring & Observability — 🔴 not for these services / ⚪ N/A at MVP
-- [ ] Health / readiness / liveness endpoints — _(planned)_
-- [ ] Metrics (latency/error rate/throughput) + alerts — _(planned; note: **#4 builds exactly this for monitored agents**, just not self-instrumented)_
+### 12. Monitoring & Observability — 🟡 (health endpoint added)
+- [x] Health / readiness / liveness probe — `GET /api/health` (covered by the smoke test)
+- [ ] Metrics (latency/error rate/throughput) + alerts — _(planned; note: **#4 builds exactly this for monitored agents**)_
 
 ### 13. Documentation — ✅ followed
 - [x] Endpoints/requests/responses documented (`API.md` derived from source; `.claude/project/api-contracts.md`)
