@@ -90,7 +90,7 @@ export function generateServerCode(ir: IR, serverName: string): string {
         `  ${JSON.stringify(tool.name)},\n` +
         `  ${JSON.stringify(desc)},\n` +
         `  ${shapeLiteral(tool)},\n` +
-        `  async (args: Record<string, any>) => {\n` +
+        `  async (args) => {\n` +
         `${handlerBody(tool, auth)}\n` +
         `  },\n` +
         `);`

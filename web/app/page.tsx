@@ -33,6 +33,7 @@ export default function Home() {
       .then((d) => setPlan(d.plan ?? "free"))
       .catch(() => {});
     const spec = new URLSearchParams(window.location.search).get("spec");
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: prefill from ?spec on mount
     if (spec) setUrl(spec);
   }, []);
 

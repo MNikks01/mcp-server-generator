@@ -86,7 +86,7 @@ export class ClaudeDescriptions implements DescriptionGenerator {
         signal: AbortSignal.timeout(20000),
       });
       if (!res.ok) throw new Error(`Anthropic ${res.status}`);
-      const data: any = await res.json();
+      const data = (await res.json()) as { content?: { text?: string }[] };
       const text = data?.content?.[0]?.text?.trim();
       if (!text) throw new Error("empty");
       return text;

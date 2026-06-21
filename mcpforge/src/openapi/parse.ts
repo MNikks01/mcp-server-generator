@@ -6,36 +6,38 @@
 
 import type { IR, IRParam, IRSchemaType, IRSecurity, IRTool } from "../ir/types.ts";
 
-const HTTP_METHODS = ["get", "post", "put", "patch", "delete"];
-const SIDE_EFFECTING = new Set(["post", "put", "patch", "delete"]);
+const HTTP_METHODS = ["get", "post", "put", "patch", "delete"] as const;
+const SIDE_EFFECTING = new Set<string>(["post", "put", "patch", "delete"]);
 
-type AnyObj = Record<string, any>;
+// The spec is untrusted JSON, so we model it as `unknown` and narrow with helpers
+// rather than asserting `any`.
+type JsonObject = Record<string, unknown>;
+const isObject = (v: unknown): v is JsonObject => typeof v === "object" && v !== null && !Array.isArray(v);
+const asObject = (v: unknown): JsonObject | undefined => (isObject(v) ? v : undefined);
+const asString = (v: unknown): string | undefined => (typeof v === "string" ? v : undefined);
+const asArray = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 
 export class ParseError extends Error {}
 
 // Minimal local $ref resolver: resolves "#/components/..." against the root doc.
-function resolveRef(doc: AnyObj, node: any, seen = new Set<string>()): any {
-  if (!node || typeof node !== "object") return node;
-  if (typeof node.$ref === "string" && node.$ref.startsWith("#/")) {
-    if (seen.has(node.$ref)) return {}; // cycle guard
-    seen.add(node.$ref);
-    const target = node.$ref
+function resolveRef(doc: JsonObject, node: unknown, seen = new Set<string>()): unknown {
+  if (!isObject(node)) return node;
+  const ref = node.$ref;
+  if (typeof ref === "string" && ref.startsWith("#/")) {
+    if (seen.has(ref)) return {}; // cycle guard
+    seen.add(ref);
+    const target = ref
       .slice(2)
       .split("/")
-      .reduce((acc: any, key: string) => (acc ? acc[decodeURIComponent(key)] : undefined), doc);
+      .reduce<unknown>((acc, key) => (isObject(acc) ? acc[decodeURIComponent(key)] : undefined), doc);
     return resolveRef(doc, target, seen);
   }
   return node;
 }
 
-function mapSchemaType(schema: AnyObj | undefined): IRSchemaType {
-  const t = schema?.type;
-  if (t === "string") return "string";
-  if (t === "number") return "number";
-  if (t === "integer") return "integer";
-  if (t === "boolean") return "boolean";
-  if (t === "array") return "array";
-  if (t === "object") return "object";
+function mapSchemaType(schema: unknown): IRSchemaType {
+  const t = asObject(schema)?.type;
+  if (t === "string" || t === "number" || t === "integer" || t === "boolean" || t === "array" || t === "object") return t;
   return "unknown";
 }
 
@@ -49,49 +51,52 @@ function toSnakeCase(input: string): string {
     .toLowerCase();
 }
 
-function parseSecurity(doc: AnyObj): IRSecurity {
-  const schemes = doc.components?.securitySchemes;
-  if (!schemes || typeof schemes !== "object") return { type: "none" };
-  const first = resolveRef(doc, Object.values(schemes)[0]) as AnyObj | undefined;
+function parseSecurity(doc: JsonObject): IRSecurity {
+  const schemes = asObject(asObject(doc.components)?.securitySchemes);
+  if (!schemes) return { type: "none" };
+  const first = asObject(resolveRef(doc, Object.values(schemes)[0]));
   if (!first) return { type: "none" };
   if (first.type === "http" && String(first.scheme).toLowerCase() === "bearer") {
     return { type: "bearer" };
   }
   if (first.type === "apiKey" && (first.in === "header" || first.in === "query")) {
-    return { type: "apiKey", name: first.name ?? "api_key", in: first.in };
+    return { type: "apiKey", name: asString(first.name) ?? "api_key", in: first.in };
   }
   if (first.type === "oauth2") return { type: "oauth2" };
   return { type: "none" };
 }
 
-export function parseOpenApi(raw: string | AnyObj): IR {
-  let doc: AnyObj;
+export function parseOpenApi(raw: string | JsonObject): IR {
+  let parsed: unknown;
   try {
-    doc = typeof raw === "string" ? JSON.parse(raw) : raw;
-  } catch (e) {
+    parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+  } catch {
     throw new ParseError("Could not parse OpenAPI document: invalid JSON.");
   }
-  if (!doc || typeof doc !== "object") throw new ParseError("Empty or invalid document.");
-  if (!doc.openapi || !String(doc.openapi).startsWith("3")) {
+  const doc = asObject(parsed);
+  if (!doc) throw new ParseError("Empty or invalid document.");
+  if (!asString(doc.openapi)?.startsWith("3")) {
     throw new ParseError("Only OpenAPI 3.x is supported in the MVP engine.");
   }
-  if (!doc.paths || typeof doc.paths !== "object") {
-    throw new ParseError("Document has no `paths`.");
-  }
+  const paths = asObject(doc.paths);
+  if (!paths) throw new ParseError("Document has no `paths`.");
 
-  const baseUrl: string = doc.servers?.[0]?.url ?? "https://api.example.com";
+  const firstServer = asObject(asArray(doc.servers)[0]);
+  const baseUrl = asString(firstServer?.url) ?? "https://api.example.com";
   const security = parseSecurity(doc);
   const tools: IRTool[] = [];
   const usedNames = new Set<string>();
 
-  for (const [path, pathItemRaw] of Object.entries(doc.paths)) {
-    const pathItem = resolveRef(doc, pathItemRaw) as AnyObj;
+  for (const [path, pathItemRaw] of Object.entries(paths)) {
+    const pathItem = asObject(resolveRef(doc, pathItemRaw));
+    if (!pathItem) continue;
     for (const method of HTTP_METHODS) {
-      const op = pathItem?.[method];
+      const op = asObject(pathItem[method]);
       if (!op) continue;
 
       // Tool name: operationId (preferred) or method_path, sanitized + de-duped.
-      let name = op.operationId ? toSnakeCase(op.operationId) : toSnakeCase(`${method}_${path}`);
+      const opId = asString(op.operationId);
+      let name = opId ? toSnakeCase(opId) : toSnakeCase(`${method}_${path}`);
       if (!name) name = toSnakeCase(`${method}_op_${tools.length}`);
       while (usedNames.has(name)) name = `${name}_${tools.length}`;
       usedNames.add(name);
@@ -99,31 +104,33 @@ export function parseOpenApi(raw: string | AnyObj): IR {
       const params: IRParam[] = [];
 
       // path/query/header parameters
-      const rawParams = [...(pathItem.parameters ?? []), ...(op.parameters ?? [])];
-      for (const pRaw of rawParams) {
-        const p = resolveRef(doc, pRaw) as AnyObj;
-        if (!p?.name || !p?.in) continue;
-        if (p.in !== "path" && p.in !== "query" && p.in !== "header") continue;
+      for (const pRaw of [...asArray(pathItem.parameters), ...asArray(op.parameters)]) {
+        const p = asObject(resolveRef(doc, pRaw));
+        const pName = asString(p?.name);
+        const pIn = asString(p?.in);
+        if (!p || !pName || !pIn) continue;
+        if (pIn !== "path" && pIn !== "query" && pIn !== "header") continue;
         params.push({
-          name: p.name,
-          in: p.in,
-          required: Boolean(p.required) || p.in === "path",
+          name: pName,
+          in: pIn,
+          required: Boolean(p.required) || pIn === "path",
           schemaType: mapSchemaType(resolveRef(doc, p.schema)),
-          description: p.description,
+          description: asString(p.description),
         });
       }
 
       // requestBody -> a single "body" param
-      const body = resolveRef(doc, op.requestBody) as AnyObj | undefined;
-      if (body?.content) {
-        const json = body.content["application/json"] ?? Object.values(body.content)[0];
-        const schema = resolveRef(doc, (json as AnyObj)?.schema);
+      const body = asObject(resolveRef(doc, op.requestBody));
+      const content = asObject(body?.content);
+      if (body && content) {
+        const media = asObject(content["application/json"]) ?? asObject(Object.values(content)[0]);
+        const schemaType = mapSchemaType(resolveRef(doc, media?.schema));
         params.push({
           name: "body",
           in: "body",
           required: Boolean(body.required),
-          schemaType: mapSchemaType(schema) === "unknown" ? "object" : mapSchemaType(schema),
-          description: body.description ?? "Request body (JSON).",
+          schemaType: schemaType === "unknown" ? "object" : schemaType,
+          description: asString(body.description) ?? "Request body (JSON).",
         });
       }
 
@@ -131,7 +138,7 @@ export function parseOpenApi(raw: string | AnyObj): IR {
         name,
         method: method.toUpperCase(),
         path,
-        summary: op.summary ?? op.description,
+        summary: asString(op.summary) ?? asString(op.description),
         params,
         sideEffecting: SIDE_EFFECTING.has(method),
       });
@@ -140,9 +147,10 @@ export function parseOpenApi(raw: string | AnyObj): IR {
 
   if (tools.length === 0) throw new ParseError("No operations found in the spec.");
 
+  const info = asObject(doc.info);
   return {
-    title: doc.info?.title ?? "Generated API",
-    version: doc.info?.version ?? "1.0.0",
+    title: asString(info?.title) ?? "Generated API",
+    version: asString(info?.version) ?? "1.0.0",
     baseUrl,
     security,
     tools,

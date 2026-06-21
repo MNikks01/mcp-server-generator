@@ -5,8 +5,8 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Engine uses pragmatic `any` for OpenAPI shape-walking; allow it.
-  { rules: { "@typescript-eslint/no-explicit-any": "off" } },
+  // Ban explicit any — proper types or unknown.
+  { rules: { "@typescript-eslint/no-explicit-any": "error" } },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

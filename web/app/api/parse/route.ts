@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 
   try {
     const obj = toSpecObject(raw);
-    const ir = parseOpenApi(obj as never);
+    const ir = parseOpenApi(obj as Record<string, unknown>);
     return NextResponse.json({ ir });
   } catch (e) {
     const msg = e instanceof ParseError ? e.message : "Could not parse the spec (expected OpenAPI 3 JSON or YAML).";

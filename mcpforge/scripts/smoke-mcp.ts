@@ -12,7 +12,14 @@ const serverEntry = resolve(process.argv[2] ?? "generated/pet-store/dist/index.j
 const child = spawn("node", [serverEntry], { stdio: ["pipe", "pipe", "inherit"] });
 
 let buf = "";
-const pending = new Map<number, (msg: any) => void>();
+interface RpcMessage {
+  jsonrpc?: string;
+  id?: number;
+  method?: string;
+  params?: unknown;
+  result?: { serverInfo?: { name?: string }; tools?: { name: string }[]; content?: { type: string; text: string }[]; [k: string]: unknown };
+}
+const pending = new Map<number, (msg: RpcMessage) => void>();
 
 child.stdout.on("data", (chunk) => {
   buf += chunk.toString();
@@ -21,8 +28,8 @@ child.stdout.on("data", (chunk) => {
     const line = buf.slice(0, nl).trim();
     buf = buf.slice(nl + 1);
     if (!line) continue;
-    let msg: any;
-    try { msg = JSON.parse(line); } catch { continue; }
+    let msg: RpcMessage;
+    try { msg = JSON.parse(line) as RpcMessage; } catch { continue; }
     if (msg.id && pending.has(msg.id)) {
       pending.get(msg.id)!(msg);
       pending.delete(msg.id);
@@ -30,10 +37,10 @@ child.stdout.on("data", (chunk) => {
   }
 });
 
-function send(obj: any): void {
+function send(obj: unknown): void {
   child.stdin.write(JSON.stringify(obj) + "\n");
 }
-function request(id: number, method: string, params?: any): Promise<any> {
+function request(id: number, method: string, params?: unknown): Promise<RpcMessage> {
   return new Promise((res) => {
     pending.set(id, res);
     send({ jsonrpc: "2.0", id, method, params });
