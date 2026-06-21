@@ -175,7 +175,7 @@ export default function Home() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-          placeholder="https://.../openapi.json"
+          aria-label="https://.../openapi.json" placeholder="https://.../openapi.json"
         />
         <details className="text-sm text-zinc-500">
           <summary className="cursor-pointer">…or paste / upload the spec (JSON or YAML)</summary>
@@ -184,13 +184,14 @@ export default function Home() {
             onChange={(e) => setPaste(e.target.value)}
             rows={6}
             className="mt-2 w-full rounded-md border border-zinc-300 px-3 py-2 font-mono text-xs dark:border-zinc-700 dark:bg-zinc-900"
+            aria-label="OpenAPI spec (JSON or YAML)"
             placeholder='{ "openapi": "3.0.0", ... }  or  openapi: 3.0.0 ...'
           />
           <input type="file" accept=".json,.yaml,.yml,.txt" onChange={onFile} className="mt-2 text-xs" />
         </details>
-        <button
+        <button type="button"
           onClick={parse}
-          disabled={busy === "parse"}
+          disabled={busy === "parse"} aria-busy={busy === "parse"}
           className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-black"
         >
           {busy === "parse" ? "Parsing…" : "Parse spec"}
@@ -224,14 +225,14 @@ export default function Home() {
                 <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
                   {t.method}
                 </span>
-                <span className="text-zinc-400">{t.path}</span>
+                <span className="text-zinc-500">{t.path}</span>
                 {t.sideEffecting && <span className="text-xs text-amber-600">side-effecting</span>}
               </label>
             ))}
           </div>
-          <button
+          <button type="button"
             onClick={generate}
-            disabled={busy === "generate" || selected.size === 0}
+            disabled={busy === "generate" || selected.size === 0} aria-busy={busy === "generate" || selected.size === 0}
             className="mt-4 rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-black"
           >
             {busy === "generate" ? "Generating…" : `Generate server (${selected.size} tools)`}
@@ -253,23 +254,23 @@ export default function Home() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <button
+            <button type="button"
               onClick={download}
-              disabled={busy === "download"}
+              disabled={busy === "download"} aria-busy={busy === "download"}
               className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
             >
               {busy === "download" ? "Zipping…" : "Download ZIP"}
             </button>
-            <button onClick={copyMcpJson} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
+            <button type="button" onClick={copyMcpJson} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
               {copied ? "Copied!" : "Copy mcp.json"}
             </button>
-            <button onClick={() => setShowFiles((s) => !s)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
+            <button type="button" onClick={() => setShowFiles((s) => !s)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
               {showFiles ? "Hide files" : "View files"}
             </button>
             {plan === "pro" && (
-              <button
+              <button type="button"
                 onClick={pushToGithub}
-                disabled={busy === "github"}
+                disabled={busy === "github"} aria-busy={busy === "github"}
                 className="rounded-md border border-zinc-300 px-4 py-2 text-sm disabled:opacity-50 dark:border-zinc-700"
               >
                 {busy === "github" ? "Pushing…" : "Push to GitHub"}

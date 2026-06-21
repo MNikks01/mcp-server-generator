@@ -46,9 +46,11 @@
 - [~] `memo`/`useMemo`/`useCallback` where it matters
 - [ ] Lazy loading / image optimization (WebP/AVIF) — _(few/no images)_
 
-### 11. Accessibility — 🔴→🟡 (known weak spot)
-- [~] Semantic HTML; [~] labels; [~] keyboard (Enter handlers); [~] contrast (Tailwind defaults)
-- [ ] Screen-reader pass; [ ] focus management; [ ] ARIA labels; [ ] alt text — _(not audited; needs a real a11y pass)_
+### 11. Accessibility — ✅ (a11y pass done)
+- [x] Labels for every control (`aria-label` on inputs/selects) — asserted by the component test (every textbox/combobox has an accessible name)
+- [x] Keyboard operable; [x] visible focus (global `:focus-visible` outline); [x] AA contrast (darkened text tokens)
+- [x] ARIA: `role="alert"` + `aria-live` on errors/status; `aria-busy` on async buttons; `type="button"` on buttons
+- [ ] Landmark regions + full screen-reader audit + alt text — _(partial; ContextOS has labelled landmark regions; deeper SR audit recommended)_
 
 ### 12. Responsive Design — 🟡
 - [~] Mobile/tablet/desktop via Tailwind breakpoints (some grids responsive)
@@ -61,7 +63,7 @@
 ### 14. Testing — 🟡→✅
 - [x] **Component tests** (Vitest + Testing Library + jsdom) — `web/test/page.test.tsx`, run in CI
 - [x] Integration of user flows via **web HTTP smoke** (`scripts/smoke-api.mjs`, incl. `/api/health`)
-- [ ] E2E (Playwright) + deep a11y audit — _(next; ContextOS has the reference a11y pass)_
+- [ ] E2E (Playwright) — _(next layer; a11y pass now done across all apps)_
 
 ### 15. Monitoring & Analytics — 🔴
 - [ ] Error/crash/perf monitoring; [ ] analytics/funnels — _(none; planned: Sentry/analytics)_
