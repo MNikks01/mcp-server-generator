@@ -63,7 +63,7 @@
 ### 14. Testing — 🟡→✅
 - [x] **Component tests** (Vitest + Testing Library + jsdom) — `web/test/page.test.tsx`, run in CI
 - [x] Integration of user flows via **web HTTP smoke** (`scripts/smoke-api.mjs`, incl. `/api/health`)
-- [ ] E2E (Playwright) — _(next layer; a11y pass now done across all apps)_
+- [x] E2E (Playwright) — `web/e2e/*.spec.ts`, real Chromium, run in CI
 
 ### 15. Monitoring & Analytics — 🔴
 - [ ] Error/crash/perf monitoring; [ ] analytics/funnels — _(none; planned: Sentry/analytics)_

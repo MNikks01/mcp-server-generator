@@ -39,3 +39,23 @@ jobs:
       - name: Web unit tests
         working-directory: web
         run: node scripts/test-plan.ts
+  e2e:
+    name: e2e (playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install
+        working-directory: web
+        run: npm install --no-audit --no-fund
+      - name: Install browser
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Build
+        working-directory: web
+        run: npm run build
+      - name: E2E
+        working-directory: web
+        run: npm run test:e2e
