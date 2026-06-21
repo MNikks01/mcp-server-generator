@@ -7,17 +7,18 @@ on:
 permissions:
   contents: read
 jobs:
-  engine:
-    name: engine tests
+  test:
+    name: typecheck + unit + integration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-      - name: Run engine tests
-        working-directory: mcpforge
-        run: node scripts/test-specs.ts
+      - name: Install dev tooling
+        run: npm install --no-audit --no-fund
+      - name: Test (typecheck + unit + integration)
+        run: npm test
   web:
     name: web build
     runs-on: ubuntu-latest

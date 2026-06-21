@@ -26,3 +26,22 @@ Fill in the PR template, link any issue, and confirm the checklist. CI (build + 
 
 ## Code of Conduct
 By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
+
+
+## Testing
+
+This repo uses Node's built-in test runner (no framework deps) + `tsc` for type-checking, wired via a root `package.json` and **Husky** git hooks.
+
+```bash
+npm install          # installs dev tooling (typescript, commitlint, husky) + sets up hooks
+npm test             # typecheck (tsc --noEmit, strict) + unit + integration
+npm run test:unit    # just the unit + integration tests (node --test)
+npm run typecheck    # just tsc --noEmit
+```
+
+**Test types**
+- **Unit + integration** — `mcpforge/test/*.test.ts` (`node:test`).
+- **Type-check** — `tsc --noEmit` (strict) over the engine.
+- **E2E** — web HTTP smoke: build + start `web`, then `node scripts/smoke-api.mjs`.
+
+**Git hooks (Husky):** `pre-commit` runs `npm test`; `commit-msg` enforces [Conventional Commits](https://www.conventionalcommits.org) via commitlint.

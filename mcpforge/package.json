@@ -7,7 +7,7 @@
   "bin": { "mcpforge": "src/cli.ts" },
   "scripts": {
     "demo": "node scripts/demo.ts",
-    "test": "node scripts/test-specs.ts",
+    "test": "node --test test/*.test.ts",
     "cli": "node src/cli.ts",
     "sync-engine": "node scripts/sync-engine.mjs",
     "sync-engine:check": "node scripts/sync-engine.mjs --check"
