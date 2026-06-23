@@ -1,15 +1,13 @@
-// Codebase walker — read a repo directory into in-memory source files.
-// Zero-network, dependency-free. The discoverers (discover.ts) operate on the
-// returned FileDoc[], so they stay pure and unit-testable without touching disk.
+// Codebase walker — read a repo directory into in-memory source files, then hand off
+// to the pure scanner (scan.ts). This is the filesystem entry point (CLI); the web app
+// builds FileDoc[] from an uploaded zip instead and calls scanFilesToIR directly.
 
 import { type Dirent, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative, sep } from "node:path";
-
-export interface FileDoc {
-  /** Repo-relative path, always using forward slashes (stable across OSes). */
-  path: string;
-  content: string;
-}
+import { basename, join, relative, sep } from "node:path";
+import type { IR } from "../ir/types.ts";
+import type { FileDoc } from "./types.ts";
+import { readProjectName } from "./types.ts";
+import { scanFilesToIR, type ScanOptions, ScanError } from "./scan.ts";
 
 // Directories that never contain the user's own API definitions.
 const SKIP_DIRS = new Set([
@@ -82,14 +80,10 @@ export function walkCodebase(root: string, options: WalkOptions = {}): FileDoc[]
   return files;
 }
 
-/** Best-effort project name: the `name` field of the nearest root package.json. */
-export function readProjectName(files: FileDoc[]): string | undefined {
-  const pkg = files.find((f) => f.path === "package.json");
-  if (!pkg) return undefined;
-  try {
-    const name = (JSON.parse(pkg.content) as { name?: unknown }).name;
-    return typeof name === "string" && name.trim() ? name : undefined;
-  } catch {
-    return undefined;
-  }
+/** Walk a repo directory and assemble an IR. */
+export function scanCodebase(dir: string, opts: ScanOptions = {}): IR {
+  const files = walkCodebase(dir);
+  if (files.length === 0) throw new ScanError(`No source files found under ${dir}.`);
+  const title = opts.title ?? readProjectName(files) ?? (basename(dir.replace(/\/+$/, "")) || "Generated API");
+  return scanFilesToIR(files, { ...opts, title });
 }

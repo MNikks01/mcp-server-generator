@@ -1,3 +1,6 @@
+// GENERATED from mcpforge/src/codebase/discover.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // Route discovery — find HTTP endpoints defined in source code and normalize them
 // into IR tools. Heuristic, dependency-free, zero-network. Pure functions over
 // FileDoc[], so the whole thing is unit-testable without a real repo.
@@ -6,8 +9,8 @@
 // Next.js API routes (app router + pages/api), Fastify, NestJS, FastAPI, Flask.
 // Auth is inferred from common middleware/usage (detectSecurity).
 
-import type { IRParam, IRSecurity, IRTool } from "../ir/types.ts";
-import type { FileDoc } from "./types.ts";
+import type { IRParam, IRSecurity, IRTool } from "../ir/types";
+import type { FileDoc } from "./types";
 
 const SIDE_EFFECTING = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 const HTTP = "get|post|put|patch|delete|all|options|head";

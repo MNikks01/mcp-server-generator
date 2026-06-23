@@ -16,7 +16,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const srcRoot = resolve(here, "../src");
 const destRoot = resolve(here, "../../web/lib/engine");
 
-// Files the web app needs (cli.ts and output/write.ts are CLI-only).
+// Files the web app needs (cli.ts, output/write.ts, and codebase/walk.ts are CLI-only).
+// The codebase trio (types/discover/scan) is the pure, fs-free scanner path the web
+// /api/scan route uses; walk.ts is excluded because it imports node:fs.
 const FILES = [
   "ir/types.ts",
   "openapi/parse.ts",
@@ -24,6 +26,9 @@ const FILES = [
   "generator/server-template.ts",
   "generator/project-files.ts",
   "generator/build.ts",
+  "codebase/types.ts",
+  "codebase/discover.ts",
+  "codebase/scan.ts",
 ];
 
 function transform(rel, content) {

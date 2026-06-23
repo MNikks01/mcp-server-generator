@@ -8,7 +8,8 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { statSync } from "node:fs";
 import { parseOpenApi, ParseError } from "./openapi/parse.ts";
-import { scanCodebase, ScanError } from "./codebase/scan.ts";
+import { scanCodebase } from "./codebase/walk.ts";
+import { ScanError } from "./codebase/scan.ts";
 import { build } from "./generator/build.ts";
 import { writeFiles } from "./output/write.ts";
 

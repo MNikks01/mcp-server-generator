@@ -20,10 +20,12 @@ export default function Home() {
   const [ir, setIr] = useState<IR | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [result, setResult] = useState<GenResult | null>(null);
-  const [busy, setBusy] = useState<"" | "parse" | "generate" | "download" | "github">("");
+  const [busy, setBusy] = useState<"" | "parse" | "scan" | "generate" | "download" | "github">("");
   const [error, setError] = useState("");
   const [showFiles, setShowFiles] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [zip, setZip] = useState<File | null>(null);
+  const [scanBaseUrl, setScanBaseUrl] = useState("");
 
   useEffect(() => {
     // Establish an anonymous session so saved history attaches to it.
@@ -46,6 +48,28 @@ export default function Home() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error?.message ?? "Parse failed");
+      setIr(data.ir);
+      setSelected(new Set<string>(data.ir.tools.map((t: { name: string }) => t.name)));
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function scan() {
+    if (!zip) return;
+    setError("");
+    setResult(null);
+    setIr(null);
+    setBusy("scan");
+    try {
+      const form = new FormData();
+      form.append("file", zip);
+      if (scanBaseUrl.trim()) form.append("baseUrl", scanBaseUrl.trim());
+      const res = await fetch("/api/scan", { method: "POST", body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message ?? "Scan failed");
       setIr(data.ir);
       setSelected(new Set<string>(data.ir.tools.map((t: { name: string }) => t.name)));
     } catch (e) {
@@ -187,6 +211,37 @@ export default function Home() {
         >
           {busy === "parse" ? "Parsing…" : "Parse spec"}
         </button>
+      </section>
+
+      <section className="mt-8 rounded-md border border-zinc-200 p-4 dark:border-zinc-800" aria-labelledby="scan-heading">
+        <h2 id="scan-heading" className="text-sm font-medium">…or generate from your codebase (no spec needed)</h2>
+        <p className="mt-1 text-sm text-zinc-500">
+          Upload a <code>.zip</code> of your project. MCPForge reads the source, finds your API routes, and builds the
+          MCP tools itself — Express/Node, Next.js, Fastify, NestJS, FastAPI, Flask.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <input
+            type="file"
+            accept=".zip"
+            aria-label="Codebase .zip"
+            onChange={(e) => setZip(e.target.files?.[0] ?? null)}
+            className="text-xs"
+          />
+          <input
+            value={scanBaseUrl}
+            onChange={(e) => setScanBaseUrl(e.target.value)}
+            aria-label="Base URL (optional)"
+            placeholder="Base URL (optional, e.g. https://api.myapp.com)"
+            className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          />
+          <button type="button"
+            onClick={scan}
+            disabled={busy === "scan" || !zip} aria-busy={busy === "scan"}
+            className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-black"
+          >
+            {busy === "scan" ? "Scanning…" : "Scan codebase"}
+          </button>
+        </div>
       </section>
 
       {error && (

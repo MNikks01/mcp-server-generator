@@ -60,7 +60,7 @@ Built and shipped, and now **free & open source**:
 
 - ✅ Engine: paste a real spec → download → **runs in Claude Desktop**
 - ✅ CLI (`mcpforge <spec>`) and free web generator
-- ✅ **Generate from your codebase** — `mcpforge scan ./my-app` reads your source, finds the APIs, and decides the MCP tools itself (Express/Node, Next.js, Fastify, NestJS, FastAPI, Flask)
+- ✅ **Generate from your codebase** — reads your source, finds the APIs, and decides the MCP tools itself (Express/Node incl. `app.use()` mount prefixes, Next.js, Fastify, NestJS, FastAPI, Flask), and infers auth (JWT/Bearer, API key, OAuth2). Use the CLI (`mcpforge scan ./my-app`) **or the web app** (upload a `.zip`)
 - ✅ Unlimited endpoints, GitHub push, saved history — all free, no sign-up
 - ▶ Deploy your own in one click (see [DEPLOY.md](./DEPLOY.md)) or use the hosted app
 

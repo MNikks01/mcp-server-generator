@@ -1,13 +1,16 @@
+// GENERATED from mcpforge/src/codebase/scan.ts — DO NOT EDIT.
+// Single source of truth: mcpforge/src. Regenerate via: node mcpforge/scripts/sync-engine.mjs
+
 // Codebase -> IR (pure core). The second front door into the engine (the first is
 // OpenAPI). Both produce the same IR, so the generator, ZIP output, and web layer are
 // unchanged (see ir/types.ts — the keystone). This module is dependency-free and
 // filesystem-free, so the web app can run it on files unzipped from an upload; the
 // CLI's directory entry point (scanCodebase) lives in walk.ts.
 
-import type { IR, IRTool } from "../ir/types.ts";
-import type { FileDoc } from "./types.ts";
-import { readProjectName } from "./types.ts";
-import { detectSecurity, discoverRoutes, routesToTools } from "./discover.ts";
+import type { IR, IRTool } from "../ir/types";
+import type { FileDoc } from "./types";
+import { readProjectName } from "./types";
+import { detectSecurity, discoverRoutes, routesToTools } from "./discover";
 
 export class ScanError extends Error {}
 

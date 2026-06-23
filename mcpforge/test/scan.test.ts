@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import type { FileDoc } from "../src/codebase/walk.ts";
-import { normalizePath } from "../src/codebase/discover.ts";
+import type { FileDoc } from "../src/codebase/types.ts";
+import { detectSecurity, normalizePath } from "../src/codebase/discover.ts";
 import { scanFilesToIR, ScanError } from "../src/codebase/scan.ts";
 
 function toolsOf(files: FileDoc[]) {
@@ -132,6 +132,53 @@ test("dedupes identical routes across files", () => {
 
 test("throws ScanError when no routes are found", () => {
   assert.throws(() => scanFilesToIR([{ path: "util.js", content: `export const add = (a,b) => a+b;` }]), ScanError);
+});
+
+test("Express: app.use('/api', router) prefixes the router's routes", () => {
+  const tools = toolsOf([
+    { path: "index.js", content: `const app = express(); app.use('/api', users);` },
+    { path: "users.js", content: `users.get('/', list); users.post('/:id', create);` },
+  ]);
+  assert.ok(tools.has("GET /api"), "router GET '/' -> /api");
+  assert.ok(tools.has("POST /api/{id}"), "router POST '/:id' -> /api/{id}");
+});
+
+test("Express: nested mounts compose prefixes (app.use -> router.use)", () => {
+  const tools = toolsOf([
+    { path: "app.js", content: `app.use('/api', v1); v1.use('/users', usersRouter);` },
+    { path: "users.js", content: `usersRouter.get('/:id', h);` },
+  ]);
+  assert.ok(tools.has("GET /api/users/{id}"));
+});
+
+test("detectSecurity: JWT/Bearer middleware -> bearer", () => {
+  const sec = detectSecurity([{ path: "auth.js", content: `import jwt from 'jsonwebtoken'; jwt.verify(token, secret);` }]);
+  assert.equal(sec.type, "bearer");
+});
+
+test("detectSecurity: x-api-key header -> apiKey", () => {
+  const sec = detectSecurity([{ path: "mw.js", content: `const key = req.headers['x-api-key'];` }]);
+  assert.equal(sec.type, "apiKey");
+  assert.equal(sec.type === "apiKey" && sec.name, "x-api-key");
+  assert.equal(sec.type === "apiKey" && sec.in, "header");
+});
+
+test("detectSecurity: FastAPI OAuth2PasswordBearer -> oauth2", () => {
+  const sec = detectSecurity([{ path: "deps.py", content: `oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")` }]);
+  assert.equal(sec.type, "oauth2");
+});
+
+test("detectSecurity: no auth signals -> none", () => {
+  const sec = detectSecurity([{ path: "r.js", content: `app.get('/ping', (req,res)=>res.send('ok'));` }]);
+  assert.equal(sec.type, "none");
+});
+
+test("scanFilesToIR wires detected security into the IR", () => {
+  const ir = scanFilesToIR([
+    { path: "r.js", content: `app.get('/me', h); // uses passport` },
+    { path: "auth.js", content: `passport.authenticate('jwt');` },
+  ]);
+  assert.equal(ir.security.type, "bearer");
 });
 
 test("project name from package.json becomes the IR title", () => {
