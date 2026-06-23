@@ -1,13 +1,15 @@
-// Plan + generation store. MVP default = in-memory (per process). Production = Postgres
+// Generation store. MVP default = in-memory (per process). Production = Postgres
 // via the Drizzle schema (lib/db/schema.ts) + DATABASE_URL — implement a PgStore behind
 // the same interface and return it from getStore() when DATABASE_URL is set.
+//
+// MCPForge is free & open source: there are no plan tiers. The store keeps a lightweight
+// user record only to attach saved generations to an (anonymous) session.
 
 import type { Plan } from "../plan";
 
 export interface UserRecord {
   id: string;
   plan: Plan;
-  stripeCustomerId?: string;
 }
 
 export interface GenerationRecord {
@@ -23,9 +25,6 @@ export interface GenerationRecord {
 
 export interface Store {
   getUser(id: string): Promise<UserRecord>;
-  setPlan(id: string, plan: Plan): Promise<void>;
-  linkStripeCustomer(id: string, customerId: string): Promise<void>;
-  findByStripeCustomer(customerId: string): Promise<UserRecord | null>;
   saveGeneration(rec: GenerationRecord): Promise<void>;
   listGenerations(userId: string, limit?: number): Promise<GenerationRecord[]>;
   getGeneration(id: string): Promise<GenerationRecord | null>;
@@ -44,16 +43,6 @@ class MemoryStore implements Store {
       this.users.set(id, u);
     }
     return u;
-  }
-  async setPlan(id: string, plan: Plan): Promise<void> {
-    (await this.getUser(id)).plan = plan;
-  }
-  async linkStripeCustomer(id: string, customerId: string): Promise<void> {
-    (await this.getUser(id)).stripeCustomerId = customerId;
-  }
-  async findByStripeCustomer(customerId: string): Promise<UserRecord | null> {
-    for (const u of this.users.values()) if (u.stripeCustomerId === customerId) return u;
-    return null;
   }
   async saveGeneration(rec: GenerationRecord): Promise<void> {
     this.generations.set(rec.id, rec);

@@ -1,8 +1,17 @@
 # MCP Server Generator — "MCPForge" (working name)
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
+[![Free & Open Source](https://img.shields.io/badge/Free%20%26%20Open%20Source-%E2%9C%93-brightgreen.svg)](#-free--open-source)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%99%A5-ff69b4.svg)](https://github.com/sponsors/MNikks01)
+
+> 💚 **Free & open source, forever.** Every feature is available to everyone — no paywalls, no tiers, no sign-up. Clone and self-host it, or use the hosted app. Licensed under Apache-2.0. If it helps you, [sponsoring](https://github.com/sponsors/MNikks01) is welcome but always optional.
+
+**▶ Try it / deploy your own:** [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMNikks01%2Fmcp-server-generator&root-directory=web&project-name=mcp-server-generator) · see [DEPLOY.md](./DEPLOY.md) for CLI & self-hosting.
+
+
 > **Turn any API into a production-ready, well-described MCP server in minutes.** Paste an OpenAPI spec → download a runnable TypeScript MCP server with great tool descriptions, auth scaffolding, and validation. No toys.
 
-**Status: 🟢 ACTIVE PROJECT** (promoted ahead of ContextOS per the Phase 2.1 wedge finding — build #3 first). **Primary goal:** a single MERN developer ships a monetizable MVP in **30 days** → first user → first paying customer → first **₹10,000**.
+**Status: 🟢 ACTIVE — free & open source.** Built and shipped (engine + CLI + web app). Every feature is free for everyone; there are no paid tiers. Sponsoring development is optional. *(Historical note: this began as a "monetizable MVP" wedge experiment; it has since been made fully free & open source.)*
 
 ---
 
@@ -12,7 +21,7 @@ This is **MCPForge — the MCP Server Generator**, extracted from a larger "AI S
 
 **Code lives in two folders** (docs are at the repo root):
 - [`mcpforge/`](./mcpforge) — the generation engine + CLI (zero-dependency TypeScript; `node mcpforge/scripts/demo.ts`).
-- [`web/`](./web) — the Next.js app: free generator + plan gating + Stripe wiring (`cd web && npm install && npm run dev`).
+- [`web/`](./web) — the Next.js app: the free, open-source generator (`cd web && npm install && npm run dev`).
 
 Licensed under **Apache-2.0** — see [LICENSE](./LICENSE).
 
@@ -30,7 +39,7 @@ Licensed under **Apache-2.0** — see [LICENSE](./LICENSE).
 
 ## The product in one paragraph
 
-A developer with an API wants an AI agent (Claude, Cursor) to use it via MCP. Doing that by hand is a half-day-to-days of boilerplate — transport, auth, validation, and the hard part, **tool descriptions good enough that the model calls tools correctly.** MCPForge automates it: paste an OpenAPI spec, pick endpoints, and download a **secure-by-default, well-described, runnable** MCP server in under 3 minutes. Free to generate; **Pro** unlocks unlimited endpoints + premium descriptions + GitHub push + history; **done-for-you** setup is the fastest path to first cash.
+A developer with an API wants an AI agent (Claude, Cursor) to use it via MCP. Doing that by hand is a half-day-to-days of boilerplate — transport, auth, validation, and the hard part, **tool descriptions good enough that the model calls tools correctly.** MCPForge automates it: paste an OpenAPI spec, pick endpoints, and download a **secure-by-default, well-described, runnable** MCP server in under 3 minutes. **Everything is free** — unlimited endpoints, GitHub push, and saved history, plus premium LLM descriptions when you add your own (optional) API key. No tiers, no sign-up.
 
 ## Why this is the project to build first
 
@@ -38,22 +47,21 @@ Phase 2.1 of ContextOS confirmed the wedge order: **#3 (this) → #2 (Codebase I
 
 ## MVP scope (ruthlessly small)
 
-**In:** OpenAPI → TS MCP server, LLM tool descriptions, auth scaffold, Zod validation, README + mcp.json, preview + ZIP download, Free/Pro, Stripe, GitHub push (Pro).
+**In:** OpenAPI → TS MCP server, LLM tool descriptions, auth scaffold, Zod validation, README + mcp.json, preview + ZIP download, saved history, GitHub push — **all free**.
 **Out (deferred):** hosting/runtime, Postgres/GraphQL/codebase inputs, teams, marketplace, observability, sandboxes, Python output. (Full cut-list + rationale: [MVP.md §1](./MVP.md).)
 
 ## Tech stack (solo-dev speed-optimized)
 
-Next.js 14 (full-stack, no separate backend) + TypeScript + Tailwind + shadcn/ui · `@apidevtools/swagger-parser` · `@modelcontextprotocol/sdk` (pinned) · Anthropic SDK (Haiku/Sonnet) · `jszip` · Zod · Postgres (Neon) + Drizzle · Clerk auth · Stripe · Octokit · Vercel. Runs on free tiers. (Details + rationale: [MVP.md §4](./MVP.md), [TECH_STACK.md](./TECH_STACK.md).)
+Next.js 16 (full-stack, no separate backend) + TypeScript + Tailwind · `@apidevtools/swagger-parser` · `@modelcontextprotocol/sdk` (pinned) · Anthropic SDK (optional, for premium descriptions) · `jszip` · Zod · in-memory store by default (optional Postgres + Drizzle) · optional Clerk auth · Octokit · Vercel. Runs entirely on free tiers, with no required keys. (Details: [MVP.md §4](./MVP.md), [TECH_STACK.md](./TECH_STACK.md).)
 
-## The 30-day milestones
+## Status
 
-| Day | Milestone |
-|-----|-----------|
-| 6–7 | Engine works: paste real spec → download → **runs in Claude Desktop** |
-| 14 | Free generator live on Vercel → **first users** |
-| 21 | Auth + Pro + Stripe → **can take money** |
-| 27 | **First paying customer** (done-for-you) |
-| 30 | **₹10,000 in sight** (done-for-you + Pro + one-time) |
+Built and shipped, and now **free & open source**:
+
+- ✅ Engine: paste a real spec → download → **runs in Claude Desktop**
+- ✅ CLI (`mcpforge <spec>`) and free web generator
+- ✅ Unlimited endpoints, GitHub push, saved history — all free, no sign-up
+- ▶ Deploy your own in one click (see [DEPLOY.md](./DEPLOY.md)) or use the hosted app
 
 ## Document map
 
@@ -64,4 +72,4 @@ Next.js 14 (full-stack, no separate backend) + TypeScript + Tailwind + shadcn/ui
 ## One-liner
 > The fastest way to make any API callable by AI — production-ready MCP servers, generated.
 
-*Active project. Build the MVP, get paid, then expand. The goal is the fastest path to first user / first paying customer / first ₹10,000 — not the final company. Last reviewed 2026-06-20.*
+*Active, shipped, and free & open source (Apache-2.0). Use it, self-host it, or [sponsor](https://github.com/sponsors/MNikks01) — always optional.*

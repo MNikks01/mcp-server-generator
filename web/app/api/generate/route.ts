@@ -5,7 +5,6 @@ import { build } from "@/lib/engine/generator/build";
 import { ClaudeDescriptions } from "@/lib/engine/generator/descriptions";
 import { getUserId } from "@/lib/identity";
 import { getStore } from "@/lib/db/store";
-import { checkEndpointLimit, planLimits, type Plan } from "@/lib/plan";
 
 export const runtime = "nodejs";
 
@@ -26,26 +25,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: { code: "invalid_request", message: "Missing IR. Parse a spec first." } }, { status: 400 });
   }
 
-  // Resolve plan (anonymous = free) and enforce the free endpoint cap.
   const userId = await getUserId();
   const store = getStore();
-  const plan: Plan = userId ? (await store.getUser(userId)).plan : "free";
-  const count = body.selectedTools?.length ?? body.ir.tools.length;
-  const limit = checkEndpointLimit(plan, count);
-  if (!limit.ok) {
-    return NextResponse.json({ error: { code: "endpoint_limit", message: limit.message } }, { status: 402 });
-  }
 
-  // Pro gets premium descriptions when an LLM key is configured; otherwise both fall
-  // back to the (excellent) spec-derived descriptions.
+  // Free & open source: unlimited endpoints for everyone. Premium descriptions are
+  // used whenever an LLM key is configured; otherwise the (excellent) spec-derived
+  // descriptions are used.
   const key = process.env.ANTHROPIC_API_KEY;
-  const descriptionGenerator =
-    planLimits(plan).premiumDescriptions && key ? new ClaudeDescriptions(key, "claude-sonnet-4-6") : undefined;
+  const descriptionGenerator = key ? new ClaudeDescriptions(key, "claude-sonnet-4-6") : undefined;
 
   const ir = selectTools(body.ir, body.selectedTools);
   const result = await build(ir, { descriptionGenerator });
 
-  // Persist to history for signed-in users (so Pro can list/re-download).
+  // Persist to history for the current session (so it can be listed/re-downloaded).
   let generationId: string | undefined;
   if (userId) {
     generationId = randomUUID();
@@ -66,6 +58,5 @@ export async function POST(req: Request) {
     files: result.files,
     descriptions: result.descriptions,
     toolCount: result.toolCount,
-    plan,
   });
 }

@@ -1,5 +1,7 @@
 # MCP Server Generator — MONETIZATION
 
+> ⚠️ **HISTORICAL / NOT IN EFFECT.** MCPForge is now **free & open source** — there are no paid tiers, no paywall, and no "Pro" plan. Every feature is available to everyone. The strategy below is preserved as a record of the original wedge thinking only; the only "support" mechanism today is **optional** [GitHub Sponsors](https://github.com/sponsors/MNikks01).
+
 > How this makes money — optimized for the **first ₹10,000**, then a small recurring business, then (later) a real one. The core insight is uncomfortable and important: **don't try to monetize the act of generation.** Pairs with [MVP.md §3](./MVP.md), [PRICING.md](./PRICING.md), [PROBLEM.md §3](./PROBLEM.md).
 
 ## 1. Executive Summary

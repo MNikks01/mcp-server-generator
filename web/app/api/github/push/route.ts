@@ -6,9 +6,10 @@ import { getStore } from "@/lib/db/store";
 
 export const runtime = "nodejs";
 
-// Push a saved generation to a new GitHub repo (Pro). The token is supplied per
-// request (a GitHub PAT with `repo` scope) and never stored. Uses the REST Contents
-// API (no extra dependency). Production: replace the pasted token with GitHub OAuth.
+// Push a saved generation to a new GitHub repo. Free & open source — available to
+// everyone. The token is supplied per request (a GitHub PAT with `repo` scope) and
+// never stored. Uses the REST Contents API (no extra dependency). Production: replace
+// the pasted token with GitHub OAuth.
 function gh(path: string, token: string, init?: RequestInit) {
   return fetch("https://api.github.com" + path, {
     ...init,
@@ -25,9 +26,6 @@ export async function POST(req: Request) {
   const userId = await getUserId();
   if (!userId) return NextResponse.json({ error: { code: "no_session", message: "Load the app first." } }, { status: 401 });
   const store = getStore();
-  if ((await store.getUser(userId)).plan !== "pro") {
-    return NextResponse.json({ error: { code: "pro_required", message: "GitHub push is a Pro feature." } }, { status: 402 });
-  }
 
   const body = await req.json().catch(() => ({}) as Record<string, unknown>);
   const generationId = body.generationId as string | undefined;

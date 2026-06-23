@@ -22,16 +22,12 @@ export default function Home() {
   const [result, setResult] = useState<GenResult | null>(null);
   const [busy, setBusy] = useState<"" | "parse" | "generate" | "download" | "github">("");
   const [error, setError] = useState("");
-  const [plan, setPlan] = useState("free");
-  const [showUpgrade, setShowUpgrade] = useState(false);
   const [showFiles, setShowFiles] = useState(false);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    fetch("/api/me")
-      .then((r) => r.json())
-      .then((d) => setPlan(d.plan ?? "free"))
-      .catch(() => {});
+    // Establish an anonymous session so saved history attaches to it.
+    fetch("/api/me").catch(() => {});
     const spec = new URLSearchParams(window.location.search).get("spec");
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: prefill from ?spec on mount
     if (spec) setUrl(spec);
@@ -75,7 +71,6 @@ export default function Home() {
   async function generate() {
     if (!ir) return;
     setError("");
-    setShowUpgrade(false);
     setShowFiles(false);
     setBusy("generate");
     try {
@@ -85,10 +80,6 @@ export default function Home() {
         body: JSON.stringify({ ir, selectedTools: [...selected] }),
       });
       const data = await res.json();
-      if (res.status === 402) {
-        setShowUpgrade(true);
-        throw new Error(data.error?.message ?? "Upgrade required");
-      }
       if (!res.ok) throw new Error(data.error?.message ?? "Generation failed");
       setResult(data);
     } catch (e) {
@@ -155,19 +146,18 @@ export default function Home() {
         <h1 className="text-3xl font-bold tracking-tight">MCPForge</h1>
         <span className="text-sm text-zinc-500">
           <Link href="/examples" className="underline">Examples</Link>
-          {plan === "pro" && (
-            <>
-              {" · "}
-              <Link href="/history" className="underline">History</Link>
-            </>
-          )}
-          {" · "}Plan: <span className="font-medium">{plan}</span> ·{" "}
-          <Link href="/pricing" className="underline">Pricing</Link>
+          {" · "}
+          <Link href="/history" className="underline">History</Link>
+          {" · "}
+          <a href="https://github.com/MNikks01/mcp-server-generator" target="_blank" rel="noopener noreferrer" className="underline">GitHub</a>
+          {" · "}
+          <a href="https://github.com/sponsors/MNikks01" target="_blank" rel="noopener noreferrer" className="underline">Sponsor ♥</a>
         </span>
       </div>
       <p className="mt-2 text-zinc-500">
-        Turn any API into a production-ready MCP server in minutes. Give it an OpenAPI spec (JSON or YAML) and get a
-        runnable, well-described MCP server — auth, validation, and good tool descriptions included.
+        Turn any API into a production-ready MCP server in minutes — free &amp; open source. Give it an OpenAPI spec
+        (JSON or YAML) and get a runnable, well-described MCP server, with auth, validation, and good tool descriptions
+        included. No limits, no sign-up.
       </p>
 
       <section className="mt-8 space-y-3">
@@ -202,14 +192,6 @@ export default function Home() {
       {error && (
         <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
-          {showUpgrade && (
-            <>
-              {" "}
-              <Link href="/pricing" className="font-medium underline">
-                Upgrade to Pro →
-              </Link>
-            </>
-          )}
         </p>
       )}
 
@@ -268,15 +250,13 @@ export default function Home() {
             <button type="button" onClick={() => setShowFiles((s) => !s)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">
               {showFiles ? "Hide files" : "View files"}
             </button>
-            {plan === "pro" && (
-              <button type="button"
-                onClick={pushToGithub}
-                disabled={busy === "github"} aria-busy={busy === "github"}
-                className="rounded-md border border-zinc-300 px-4 py-2 text-sm disabled:opacity-50 dark:border-zinc-700"
-              >
-                {busy === "github" ? "Pushing…" : "Push to GitHub"}
-              </button>
-            )}
+            <button type="button"
+              onClick={pushToGithub}
+              disabled={busy === "github"} aria-busy={busy === "github"}
+              className="rounded-md border border-zinc-300 px-4 py-2 text-sm disabled:opacity-50 dark:border-zinc-700"
+            >
+              {busy === "github" ? "Pushing…" : "Push to GitHub"}
+            </button>
           </div>
 
           {showFiles && (

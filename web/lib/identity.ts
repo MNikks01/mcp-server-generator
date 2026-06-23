@@ -1,8 +1,9 @@
-// Identity for the MVP. A cookie-based anonymous user id is enough to attach a plan
-// and a Stripe customer for the gating + upgrade flow.
+// Identity for the MVP. A cookie-based anonymous user id is enough to attach a
+// session's saved generations (history). MCPForge is free & open source — there
+// is no plan or billing identity to track.
 //
-// PRODUCTION SWAP: replace getUserId() with Clerk's `auth()` (per TECH_STACK.md). The
-// rest of the money mechanic (plan/store/Stripe) is identity-source-agnostic.
+// PRODUCTION SWAP: replace getUserId() with Clerk's `auth()` (per TECH_STACK.md).
+// Everything downstream (the store) is identity-source-agnostic.
 
 import { cookies } from "next/headers";
 

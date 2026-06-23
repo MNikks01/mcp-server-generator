@@ -1,29 +1,16 @@
-// Plan + gating logic (pure, unit-testable). Free vs Pro.
+// MCPForge is free & open source. There are no plan tiers, caps, or paywalls.
+// Every capability — unlimited endpoints, premium descriptions, saved history,
+// GitHub push — is available to everyone. This module is kept as the single
+// place that documents that and to keep the store's typing stable.
 
-export type Plan = "free" | "pro";
-
-export const FREE_ENDPOINT_CAP = 8;
+export type Plan = "free";
 
 export interface PlanLimits {
   maxEndpoints: number;
   premiumDescriptions: boolean;
 }
 
-export function planLimits(plan: Plan): PlanLimits {
-  return plan === "pro"
-    ? { maxEndpoints: Number.POSITIVE_INFINITY, premiumDescriptions: true }
-    : { maxEndpoints: FREE_ENDPOINT_CAP, premiumDescriptions: false };
-}
-
-export type LimitCheck = { ok: true } | { ok: false; message: string };
-
-export function checkEndpointLimit(plan: Plan, count: number): LimitCheck {
-  const { maxEndpoints } = planLimits(plan);
-  if (count > maxEndpoints) {
-    return {
-      ok: false,
-      message: `The Free plan generates up to ${FREE_ENDPOINT_CAP} endpoints (you selected ${count}). Upgrade to Pro for unlimited endpoints + premium descriptions.`,
-    };
-  }
-  return { ok: true };
+// Everything is unlimited and premium, for everyone.
+export function planLimits(_plan?: Plan): PlanLimits {
+  return { maxEndpoints: Number.POSITIVE_INFINITY, premiumDescriptions: true };
 }

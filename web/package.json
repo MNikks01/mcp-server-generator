@@ -9,7 +9,6 @@
     "lint": "eslint",
     "test:plan": "node scripts/test-plan.ts",
     "smoke:api": "node scripts/smoke-api.mjs",
-    "smoke:phase-c": "node scripts/smoke-phase-c.mjs",
     "smoke:features": "node scripts/smoke-features.mjs",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"
@@ -20,7 +19,6 @@
     "next": "16.2.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "stripe": "^22.2.2",
     "yaml": "^2.9.0"
   },
   "devDependencies": {

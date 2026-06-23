@@ -14,10 +14,6 @@ export default function History() {
     fetch("/api/generations")
       .then(async (r) => {
         const d = await r.json();
-        if (r.status === 402) {
-          setError(d.error?.message ?? "Saved history is a Pro feature.");
-          return;
-        }
         if (!r.ok) {
           setError("Could not load history.");
           return;
@@ -38,10 +34,7 @@ export default function History() {
 
       {error && (
         <p className="mt-6 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">
-          {error}{" "}
-          <Link href="/pricing" className="font-medium underline">
-            Upgrade →
-          </Link>
+          {error}
         </p>
       )}
 
