@@ -60,8 +60,24 @@ Built and shipped, and now **free & open source**:
 
 - ✅ Engine: paste a real spec → download → **runs in Claude Desktop**
 - ✅ CLI (`mcpforge <spec>`) and free web generator
+- ✅ **Generate from your codebase** — `mcpforge scan ./my-app` reads your source, finds the APIs, and decides the MCP tools itself (Express/Node, Next.js, Fastify, NestJS, FastAPI, Flask)
 - ✅ Unlimited endpoints, GitHub push, saved history — all free, no sign-up
 - ▶ Deploy your own in one click (see [DEPLOY.md](./DEPLOY.md)) or use the hosted app
+
+### CLI usage
+
+```bash
+# From an OpenAPI spec (file or URL)
+mcpforge ./openapi.json
+mcpforge https://petstore3.swagger.io/api/v3/openapi.json -o ./petstore-mcp
+
+# From your own codebase — no spec required. Scans the source, discovers HTTP
+# routes, and generates a runnable MCP server with one tool per endpoint.
+mcpforge scan ./my-express-app
+mcpforge scan . --base-url https://api.myapp.com --llm   # --llm: Claude writes premium tool descriptions
+```
+
+`scan` works with zero API keys (deterministic route discovery); add `--llm` (and `ANTHROPIC_API_KEY`) to have Claude refine the tool descriptions. Supported today: Express/Node REST, Next.js (app-router `route.ts` + `pages/api`), Fastify, NestJS controllers, FastAPI, and Flask.
 
 ## Document map
 
