@@ -1,10 +1,11 @@
 {
-  "name": "mcpforge-engine",
+  "name": "@mnikks01/mcpforge",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "description": "MCPForge generation engine + CLI (Phase A) — OpenAPI spec -> production-ready MCP server. Runs on Node 24 native TypeScript; zero runtime dependencies.",
-  "bin": { "mcpforge": "src/cli.ts" },
+  "bin": {
+    "mcpforge": "src/cli.ts"
+  },
   "scripts": {
     "demo": "node scripts/demo.ts",
     "test": "node --test test/*.test.ts",
@@ -12,5 +13,23 @@
     "sync-engine": "node scripts/sync-engine.mjs",
     "sync-engine:check": "node scripts/sync-engine.mjs --check"
   },
-  "engines": { "node": ">=22.18" }
+  "engines": {
+    "node": ">=23.6"
+  },
+  "license": "Apache-2.0",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MNikks01/mcp-server-generator.git",
+    "directory": "mcpforge"
+  },
+  "homepage": "https://github.com/MNikks01/mcp-server-generator#readme",
+  "bugs": "https://github.com/MNikks01/mcp-server-generator/issues",
+  "publishConfig": {
+    "access": "public"
+  }
 }
