@@ -8,6 +8,16 @@
 
 **▶ Try it / deploy your own:** [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMNikks01%2Fmcp-server-generator&root-directory=web&project-name=mcp-server-generator) · see [DEPLOY.md](./DEPLOY.md) for CLI & self-hosting.
 
+**🖥️ CLI:** turn an OpenAPI spec OR your codebase into a production-ready MCP server — published on npm (needs Node ≥23.6):
+```bash
+npm i -g @mnikks01/mcpforge    # installs the `mcpforge` command — or use npx (no install) below
+npx @mnikks01/mcpforge scan ./my-app                 # codebase -> MCP server
+npx @mnikks01/mcpforge scan . --base-url https://api.myapp.com --llm
+npx @mnikks01/mcpforge ./openapi.json               # OpenAPI spec -> MCP server
+npx @mnikks01/mcpforge https://petstore3.swagger.io/api/v3/openapi.json -o ./out
+```
+From a clone instead: `node mcpforge/src/cli.ts <args>`.
+
 
 > **Turn any API into a production-ready, well-described MCP server in minutes.** Paste an OpenAPI spec → download a runnable TypeScript MCP server with great tool descriptions, auth scaffolding, and validation. No toys.
 

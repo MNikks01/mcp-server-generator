@@ -1,5 +1,18 @@
 # MCPForge — generation engine (Phase A) ✅
 
+## Install & CLI
+
+turn an OpenAPI spec OR your codebase into a production-ready MCP server. Requires Node ≥23.6 (runs on Node's native TypeScript).
+
+```bash
+npm i -g @mnikks01/mcpforge    # then run `mcpforge …`, or use npx without installing:
+npx @mnikks01/mcpforge scan ./my-app                 # codebase -> MCP server
+npx @mnikks01/mcpforge scan . --base-url https://api.myapp.com --llm
+npx @mnikks01/mcpforge ./openapi.json               # OpenAPI spec -> MCP server
+npx @mnikks01/mcpforge https://petstore3.swagger.io/api/v3/openapi.json -o ./out
+```
+
+
 The core of the MCP Server Generator: **OpenAPI spec → production-ready MCP server.** This is the implementation of [BUILD_ORDER.md](../BUILD_ORDER.md) **Phase A** (the engine), built before any UI. Pure TypeScript, runs on **Node 24 native TS**, **zero runtime dependencies**.
 
 ## Status: Phase A gate PASSED + hardened
