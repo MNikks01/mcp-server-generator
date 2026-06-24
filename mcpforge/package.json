@@ -1,6 +1,6 @@
 {
   "name": "@mnikks01/mcpforge",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "MCPForge generation engine + CLI (Phase A) — OpenAPI spec -> production-ready MCP server. Runs on Node 24 native TypeScript; zero runtime dependencies.",
   "bin": {
