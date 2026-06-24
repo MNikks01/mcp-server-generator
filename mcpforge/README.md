@@ -2,7 +2,7 @@
 
 ## Install & CLI
 
-turn an OpenAPI spec OR your codebase into a production-ready MCP server. Requires Node ≥23.6 (runs on Node's native TypeScript).
+turn an OpenAPI spec OR your codebase into a production-ready MCP server. Requires Node ≥18.
 
 ```bash
 npm i -g @mnikks01/mcpforge    # then run `mcpforge …`, or use npx without installing:
